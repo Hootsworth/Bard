@@ -178,6 +178,29 @@ body.cinema #desk::after{content:"";position:fixed;inset:0;pointer-events:none;z
 .tst{position:absolute;width:64px;height:64px}
 .tst .w1{animation:flp .28s steps(1) infinite}.tst .w2{animation:flp .28s steps(1) infinite .14s}
 @keyframes flp{50%{transform:translateY(-5px) scaleY(-0.6)}}
+#am{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+#am::-webkit-scrollbar{display:none}
+#am>button{padding:0 11px;font-weight:600;white-space:nowrap;animation:mbi .12s steps(2)}
+#am>button.o{background:var(--fg);color:var(--bg)}
+@keyframes mbi{from{transform:translateY(-4px);opacity:0}}
+#app-sw{padding:0 10px!important;display:flex;align-items:center;gap:5px;border-left:2px solid var(--fg);font-weight:600;white-space:nowrap}
+#app-sw svg{width:15px;height:15px}
+.cl,.zm{position:relative}
+.cl:active::before,.zm:active::before{content:"";position:absolute;inset:-4px;border:1px dotted var(--fg);animation:bst .15s steps(2)}
+@keyframes bst{from{inset:0}}
+.wb-bar{border:2px solid var(--fg);padding:6px 8px;margin-bottom:10px;background:conic-gradient(var(--fg) 25%,var(--bg) 0 50%,var(--fg) 0 75%,var(--bg) 0) 0 0/2px 2px}
+.wb-in{background:var(--bg);border:2px solid var(--fg);padding:6px 8px;font-size:13px;display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.wb-tl{display:flex;gap:2px;align-items:flex-end;height:16px}
+.wb-tl i{width:4px;background:var(--fg);display:inline-block}
+.wb-frame{border:2px solid var(--fg);padding:12px;background:var(--bg);font-family:'Courier New',monospace;font-size:14px;line-height:1.45;box-shadow:inset 2px 2px 0 var(--fg)}
+.wb-frame h1,.wb-frame h2,.wb-frame h3{font-family:'Pixelify Sans',monospace;margin:6px 0}
+.wb-frame hr{border:0;border-top:2px solid var(--fg);margin:8px 0}
+.wb-frame table{width:100%;border-collapse:collapse;margin:6px 0}
+.wb-frame td,.wb-frame th{border:1px solid var(--fg);padding:4px 6px;vertical-align:top}
+.wb-if{width:100%;height:250px;border:2px solid var(--fg);background:#fff;filter:grayscale(1) contrast(2.5)}
+:root[data-theme="dark"] .wb-if{filter:grayscale(1) contrast(2.5) invert(1)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .wb-if{filter:grayscale(1) contrast(2.5) invert(1)}}
+.px-p{position:fixed;width:4px;height:4px;background:var(--fg);pointer-events:none;z-index:3000}
 </style>
 <meta name="description" content="Aditya P Dixit (Adi): AI/ML engineering student, open source systems builder. Structured data for agents is in script#me.">
 <script type="application/json" id="me">{"name":"Aditya P Dixit","preferred_name":"Adi","headline":"AI/ML engineering student and open source systems builder","location":"Bengaluru, India",
@@ -215,8 +238,8 @@ body.cinema #desk::after{content:"";position:fixed;inset:0;pointer-events:none;z
 <div id="lb-t" class="lbox"></div><div id="lb-b" class="lbox"></div>
 <nav id="mb" aria-label="Menu bar">
 <button data-m="apple" aria-label="Apple menu"><svg viewBox="0 0 14 16"><path d="M7 4c1-2 3-2 3-2 0 2-1 3-3 3zM7 5C5 4 1 5 1 9c0 3 2 7 4 7 1 0 1-.5 2-.5s1 .5 2 .5c2 0 4-4 4-6-2-1-2-3 0-4C12 4 9 4 7 5z"/></svg></button>
-<button data-m="File">File</button><button data-m="Special">Special</button>
-<button id="sp" aria-label="Toggle sound"></button><button id="clk" aria-label="Date"></button>
+<div id="am"></div>
+<button id="sp" aria-label="Toggle sound"></button><button id="clk" aria-label="Date"></button><button id="app-sw" data-m="apps" aria-label="Active Application"></button>
 </nav>
 <div id="boot"><div><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" shape-rendering="crispEdges"><rect x="6" y="3" width="20" height="24"/><rect x="9" y="6" width="14" height="11"/><path d="M12 9v3M20 9v3M12 14l1 1h6l1-1"/><rect x="11" y="21" width="10" height="2" fill="currentColor"/><path d="M4 29h24"/></svg><p>Welcome to Macintosh.</p><div id="bar"><i></i></div><p id="cap" style="font-size:15px;margin:8px 0 0;min-height:1.4em"></p></div><div id="ext"></div></div>
 <script>
@@ -280,18 +303,49 @@ const FACTS=[[/git|code|repo|dev|stack|program/,'Hootsworth on GitHub','RexScrip
 [/drone|army|radar|signal|defen/,'Drone detection with the Indian Army','RF/DSP and ML research.','research'],
 [/web|site|chrome|browser|page/,'Shiny Fishstick','Turns websites into a handful of actions.','p-fish'],
 [/learn|study|course|cert/,'Five certifications','AWS, Google, HubSpot, HackerRank, Anthropic Academy.','resume']];
+const WB96=[
+[/apple|mac|system\s*7/,{u:'www.apple.com',d:'Oct 22, 1996',t:'Apple Computer, Inc.',h:`<center><h2>Welcome to Apple Computer</h2><p><i>Changing the world, one person at a time. (1996)</i></p></center><hr><table><tr><td><b>What\u2019s New (Oct \u201996)</b><br>\u2022 Mac OS 7.6 announced<br>\u2022 PowerBook 1400 w/ CD-ROM<br>\u2022 Cyberdog 1.2 Internet Suite</td><td><b>Developer Spotlight</b><br>Future Mac builder <a href="#" data-open="about">Aditya P Dixit</a> is running System 7 in 2026 with a 9.04 CGPA.</td></tr></table>`}],
+[/yahoo/,{u:'www.yahoo.com',d:'Oct 17, 1996',t:'Yahoo! Directory (1996)',h:`<center><h1>YAHOO!</h1><p>[ <a href="#" data-b="q:whats new">What\u2019s New</a> | <a href="#" data-b="q:cool">What\u2019s Cool</a> | <a href="#" data-b="q:random">Random Link</a> ]</p></center><hr><ul><li><b><a href="#" data-open="projects">Computers and Internet: AI &amp; Agents</a></b> <i>(11)</i> - RexScript, Cortex Kit, XRisk Engine</li><li><b><a href="#" data-open="research">Science: Machine Learning</a></b> <i>(3)</i> - Federated ML, RF/DSP Drone Detection</li><li><b><a href="#" data-open="cinema">Arts: Film Direction</a></b> <i>(4)</i> - INTROSPECTIVE (Script2Vision)</li><li><b><a href="#" data-open="mines">Recreation: Games</a></b> <i>(2)</i> - DQL Minesweeper, Snake</li></ul>`}],
+[/netscape|mozilla|navigator/,{u:'home.netscape.com',d:'Nov 04, 1996',t:'Welcome to Netscape',h:`<center><h2>NETSCAPE COMMUNICATIONS</h2><p><b>The Netscape Destinies:</b> Navigator 3.0 Gold is here!</p></center><hr><p>This page is enhanced for <b>Adiscape Navigator</b> at 512\u00D7342 resolution (1-bit color).</p><p>\u2022 Download plug-in: <a href="#" data-open="p-fish">Shiny Fishstick Web Compiler</a></p>`}],
+[/cern|www|info\.cern|tim|web/,{u:'info.cern.ch',d:'Nov 13, 1992',t:'The World Wide Web project',h:`<h1>World Wide Web</h1><p>The WorldWideWeb (W3) is a wide-area <a href="#" data-open="p-fish">hypermedia</a> information retrieval initiative aiming to give universal access to a large universe of documents.</p><p>Everything there is online about <a href="#" data-open="about">Adi</a> is linked directly or indirectly to this document, including <a href="#" data-open="resume">Resume.pdf</a> and <a href="#" data-open="projects">11 Open Source Projects</a>.</p>`}],
+[/mit|stanford|edu|ai\b|lab/,{u:'www.ai.mit.edu',d:'Dec 19, 1996',t:'MIT Artificial Intelligence Laboratory',h:`<h2>Artificial Intelligence Laboratory (1996)</h2><hr><p>Welcome to the AI Lab WWW server. Current 1996–2026 external research threads:</p><ul><li><a href="#" data-open="research">Hierarchical Semantic Compression</a> — A. P. Dixit</li><li><a href="#" data-open="p-dql">Deep Q-Learning in Discrete Grid Worlds</a> — 20/20 Episodes</li><li><a href="#" data-open="p-cortex">Deterministic Agent Plan Hashing (SHA-256)</a></li></ul>`}],
+[/imdb|movie|film|cinema|hollywood/,{u:'us.imdb.com',d:'Oct 29, 1996',t:'The Internet Movie Database (1996)',h:`<center><h2>The Internet Movie Database</h2></center><hr><p><b>Filmography Search:</b> Aditya P Dixit (Minor in Film Direction)</p><p>1. <a href="#" data-open="cinema">INTROSPECTIVE (Script2Vision)</a> — Director / AI Architect<br>2. <a href="#" data-open="cinema">Thar Desert RF/DSP</a> — Cinematography (50mm Anamorphic)</p>`}],
+[/spacejam|warner|jordan|jam/,{u:'www.spacejam.com',d:'Nov 15, 1996',t:'Space Jam (1996)',h:`<center><h2>\u2605 SPACE JAM (1996) \u2605</h2><p>Come on and slam, and welcome to the jam!</p><p>[ <a href="#" data-open="mines">Planet B-Ball</a> ] &nbsp; [ <a href="#" data-open="snake">Lunar Tunes</a> ] &nbsp; [ <a href="#" data-open="synth">Soundtrack</a> ]</p></center>`}],
+[/amazon|book|poethra/,{u:'www.amazon.com',d:'Dec 10, 1996',t:'Amazon.com Books! (1996)',h:`<h2>Welcome to Amazon.com Books!</h2><p><i>Earth\u2019s Biggest Bookstore (One Million Titles)</i></p><hr><p><b>Staff Pick:</b> Literary &amp; Writers\u2019 Club spotlight — <a href="#" data-open="roles">Poéthra at RVU</a> (President, Brigade Book Festival 2025 Organising Committee).</p>`}]];
 function initBrowser(el){const ad=$('.ad',el),pg=$('.pg',el),sb=$('.sb',el),H=[];let i=-1;
-function page(u){const q=u.toLowerCase().replace(/^https?:\/\/|^www\./g,''),home=!q||/^adityapdixit\.me\/?$/.test(q);let f=FACTS.filter(x=>x[0].test(q));
+const tl=[5,9,4,12,15,8,14,6,11,16,7,13].map(h=>`<i style="height:${h}px"></i>`).join('');
+const wbBar=(u,st,liveUrl)=>`<div class="wb-bar"><div class="wb-in"><div><b>INTERNET ARCHIVE WAYBACK MACHINE</b><br><span>${st}</span></div><div class="wb-tl" title="1991–1996 Captures">${tl}</div>${liveUrl?`<button class="btn" data-b="live:${esc(liveUrl)}" style="margin:0;font-size:12px;padding:0 8px">Live 1996 Iframe</button>`:''}</div></div>`;
+function renderAdiFallback(u,q,reason){let f=FACTS.filter(x=>x[0].test(q));
  if(!f.length){let h=0;for(const c of q)h=(h*31+c.charCodeAt(0))|0;f=[0,1,2].map(k=>FACTS[Math.abs(h+k*5)%FACTS.length])}
- ad.value='adityapdixit.me'+(home?'':'/?q='+encodeURIComponent(q));
- pg.innerHTML=(home?`<h1>Welcome to Adi's corner of the Web</h1><p><span class="cur"></span> You are visitor number 009,04. Best viewed in Adiscape at 512x342.</p>`:`<h1>Results for \u201C${esc(u)}\u201D</h1><p>${esc(q.split('/')[0])} could not be reached. Every road leads to Adi, so here you go.</p>`)
- +f.slice(0,4).map(x=>`<p><a href="#" data-open="${x[3]}">${x[1]}</a><br>${x[2]}</p>`).join('')+'<p><a href="#" data-b="q:random">I\u2019m feeling lucky</a></p>'}
+ pg.innerHTML=wbBar(u,`0 captures in 1991\u20131996 (${reason})`)
+ +`<h1>404: Not Found in 1996</h1><p>\u201C<b>${esc(u)}</b>\u201D did not exist in the Macintosh System 7 era (${reason}). Routing to Adi\u2019s personal archive instead:</p>`
+ +f.slice(0,4).map(x=>`<p><a href="#" data-open="${x[3]}">${x[1]}</a><br>${x[2]}</p>`).join('')+'<p><a href="#" data-b="q:apple.com">Try apple.com (1996)</a> \u00B7 <a href="#" data-b="q:yahoo.com">yahoo.com (1996)</a> \u00B7 <a href="#" data-b="q:cern.ch">info.cern.ch (1992)</a></p>'}
+async function page(u){const q=u.toLowerCase().replace(/^https?:\/\/|^www\./g,''),home=!q||/^adityapdixit\.me\/?$/.test(q);
+ if(home){ad.value='adityapdixit.me';
+  pg.innerHTML=wbBar('adityapdixit.me','System 7 Local Node \u00B7 Active')+`<h1>Welcome to Adi's Corner of the Web</h1><p><span class="cur"></span> Visitor #009,04. Powered by the <b>1996 Wayback Time-Proxy</b>: search any classic site (<code>apple.com</code>, <code>yahoo.com</code>, <code>cern.ch</code>, <code>mit.edu</code>, <code>spacejam.com</code>) to view its 1990s snapshot, or search post-1996 sites (<code>google.com</code>, <code>github.com</code>, <code>netflix.com</code>) to see what happens when a site didn\u2019t exist yet!</p>`
+  +FACTS.slice(0,4).map(x=>`<p><a href="#" data-open="${x[3]}">${x[1]}</a><br>${x[2]}</p>`).join('');return}
+ ad.value='web.archive.org/web/19961015/'+q;
+ const m96=WB96.find(x=>x[0].test(q));
+ if(m96){const d=m96[1],live=`https://web.archive.org/web/19961015if_/http://${d.u}/`;
+  pg.innerHTML=wbBar(d.u,`Saved 14 times between 1992 and ${d.d}`,live)+`<div class="wb-frame">${d.h}<hr><small><i>Archived ${d.d} \u00B7 Macintosh System 7.5.3 / MacTCP 2.0.6</i></small></div>`;return}
+ if(/\.[a-z]{2,}$/.test(q.split('/')[0])){
+  sb.textContent='Querying archive.org CDX (1996)\u2026';
+  try{const r=await fetch(`https://archive.org/wayback/available?url=${encodeURIComponent(q)}&timestamp=19961015`);
+   const j=await r.json(),s=j&&j.archived_snapshots&&j.archived_snapshots.closest;
+   if(s&&s.available&&+s.timestamp.slice(0,4)<=1997){const iu=s.url.replace(/\/web\/(\d+)\//,'/web/$1if_/');
+    pg.innerHTML=wbBar(q,`Snapshot from ${s.timestamp.slice(0,4)}-${s.timestamp.slice(4,6)}-${s.timestamp.slice(6,8)}`)+`<iframe class="wb-if" src="${esc(iu)}" title="Wayback 1996"></iframe>`;return}
+   if(s&&s.available){renderAdiFallback(u,q,`earliest capture is ${s.timestamp.slice(0,4)}`);return}
+  }catch(e){}}
+ const yr=/google/.test(q)?'founded Sept 1998':/github/.test(q)?'founded Feb 2008':/netflix/.test(q)?'founded Aug 1997':/wikipedia/.test(q)?'founded Jan 2001':/youtube/.test(q)?'founded Feb 2005':'not indexed in 1996';
+ renderAdiFallback(u,q,yr)}
 function go(u,push=1){u=(u||'').trim()||'adityapdixit.me';if(push){H.splice(i+1);H.push(u);i=H.length-1}
- el.classList.add('ld');sb.textContent='Contacting host\u2026';clearTimeout(go.t);
- go.t=setTimeout(()=>{sb.textContent='Redirecting to adityapdixit.me\u2026';go.t=setTimeout(()=>{if(!el.isConnected)return;page(u);el.classList.remove('ld');sb.textContent='Document: Done'},600)},600)}
+ el.classList.add('ld');sb.textContent='Dialing Wayback 1996 gateway\u2026';clearTimeout(go.t);
+ go.t=setTimeout(()=>{sb.textContent='Handshaking MacTCP\u2026';go.t=setTimeout(async()=>{if(!el.isConnected)return;await page(u);el.classList.remove('ld');sb.textContent='Document: Done'},420)},380)}
+el._go=go;el._back=()=>{if(i>0)go(H[--i],0)};el._fwd=()=>{if(i<H.length-1)go(H[++i],0)};
 el.addEventListener('click',e=>{const b=e.target.closest('[data-b]');if(!b)return;e.preventDefault();const k=b.dataset.b;
- if(k==='back'&&i>0)go(H[--i],0);else if(k==='fwd'&&i<H.length-1)go(H[++i],0);else if(k==='home')go('adityapdixit.me');else if(k==='go')go(ad.value);
- else if(k.startsWith('q:'))go(k==='q:random'?['pizza','cats','weather','elon musk','free robux'][Math.random()*5|0]:k.slice(2))});
+ if(k==='back')el._back();else if(k==='fwd')el._fwd();else if(k==='home')go('adityapdixit.me');else if(k==='go')go(ad.value);
+ else if(k.startsWith('live:')){const u=k.slice(5),f=$('.wb-frame',el);if(f)f.outerHTML=`<iframe class="wb-if" src="${esc(u)}" title="Live Wayback 1996"></iframe>`}
+ else if(k.startsWith('q:'))go(k==='q:random'?['apple.com','yahoo.com','cern.ch','spacejam.com','github.com'][Math.random()*5|0]:k.slice(2))});
 ad.addEventListener('keydown',e=>{if(e.key==='Enter')go(ad.value)});go('adityapdixit.me')}
 function initSnake(el){const c=$('canvas',el),x=c.getContext('2d'),N=15,C=16,info=$('.sc',el),D={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]};let s,d,nd,f,sc,hi=0,auto=0,over,t;
 const hit=(p,b)=>p[0]<0||p[1]<0||p[0]>=N||p[1]>=N||b.some(q=>q[0]==p[0]&&q[1]==p[1]);
@@ -307,6 +361,7 @@ function step(){if(!el.isConnected){clearInterval(t);document.removeEventListene
 const kd=e=>{if(!el.isConnected||!el.classList.contains('on')||e.target.tagName==='INPUT')return;const k={ArrowUp:'U',w:'U',ArrowDown:'D',s:'D',ArrowLeft:'L',a:'L',ArrowRight:'R',d:'R'}[e.key];if(k){e.preventDefault();if(ok(D[k]))nd=D[k]}};
 document.addEventListener('keydown',kd);
 el.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=b.dataset.k;if(k=='A')auto=!auto;else if(k=='X')reset();else if(ok(D[k]))nd=D[k];draw()});
+el._reset=()=>{reset();draw()};el._auto=()=>{auto=!auto;draw()};
 reset();draw();t=setInterval(step,110)}
 function initTerm(el){const o=$('.to',el),inp=$('.ti',el),bd=$('.bd',el);
 const out=t=>{o.insertAdjacentHTML('beforeend',t+'\n');bd.scrollTop=1e5};out('Adi OS 1.0. Type help.');
@@ -317,24 +372,26 @@ date:()=>new Date().toString(),
 coffee:()=>'Brewing\u2026 done. Productivity +12%. CGPA unchanged.',
 fortune:()=>['You will merge a pull request without conflicts.','A deterministic plan hash will save your day.','Your next ideathon is already won.','The bug is in the thing you just called fine.'][Math.random()*4|0],
 moof:()=>{clarus(1);return 'Moof!'},clear:()=>{o.textContent='';return 'cleared'}};
-inp.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=inp.value.trim(),m=v.match(/^open (\S+)$/);inp.value='';out('adi% '+esc(v));
+function run(v){const m=v.match(/^open (\S+)$/);out('adi% '+esc(v));
  if(C[v])out(C[v]());else if(m)W[m[1]]?open(m[1]):out('no such window: '+esc(m[1]));
  else if(v==='sudo hire adi'){out('[sudo] password for recruiter: ********\nAccess granted. Offer letter drafted.');alertBox('Offer letter generated. Please attach salary and a very large font.',[['Accept']])}
  else if(v==='rex run hello.rex')out('rex: compiling\u2026 0 errors, 1 warning (too much charm)\nHello, world.');
- else if(v)out('command not found: '+esc(v)+' (try help)')});
+ else if(v)out('command not found: '+esc(v)+' (try help)')}
+el._run=run;
+inp.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=inp.value.trim();inp.value='';run(v)});
 bd.addEventListener('click',()=>inp.focus());setTimeout(()=>inp.focus(),250)}
 const NOTES=[
 'TODO:\n- Finish Hierarchical Semantic Compression paper\n- Feed Clarus the Dogcow\n- Ship RexScript v0.4\n- Do not delete imposter syndrome.txt (load-bearing)',
 'DIRECTOR\u2019S NOTES:\nScene 4 needs more 1-bit dithering.\nCheck INTROSPECTIVE storyboard in Director\u2019s Cut.\nRemember: every good ML system has a narrative arc.',
-'SHORTCUTS & SECRETS:\n- Drag across desktop to marquee-select icons\n- Drag any icon onto Trash\n- Try the Konami code\n- Play DQL Minesweeper'];
+'SHORTCUTS & SECRETS:\n- Top menu bar changes for every active app!\n- Search apple.com or yahoo.com in Navigator\n- Drag across desktop to marquee-select icons\n- Drag any icon onto Trash'];
 function initStickies(el){const ta=$('.stk',el),st=$('.ni',el);let idx=0,notes;
  try{notes=JSON.parse(ls('notes'))}catch(e){}if(!Array.isArray(notes)||!notes.length)notes=[...NOTES];
  const render=()=>{ta.value=notes[idx];st.textContent=`Note ${idx+1} of ${notes.length}`};
  ta.addEventListener('input',()=>{notes[idx]=ta.value;ls('notes',JSON.stringify(notes))});
- el.addEventListener('click',e=>{const b=e.target.closest('[data-n]');if(!b)return;const k=b.dataset.n;
-  if(k==='nx'){idx=(idx+1)%notes.length;render()}
+ const act=k=>{if(k==='nx'){idx=(idx+1)%notes.length;render()}
   else if(k==='nw'){notes.push('New note\u2026');idx=notes.length-1;ls('notes',JSON.stringify(notes));render();ta.focus()}
-  else if(k==='rs'){notes=[...NOTES];idx=0;ls('notes',JSON.stringify(notes));render()}});render()}
+  else if(k==='rs'){notes=[...NOTES];idx=0;ls('notes',JSON.stringify(notes));render()}};
+ el._act=act;el.addEventListener('click',e=>{const b=e.target.closest('[data-n]');if(b)act(b.dataset.n)});render()}
 function initSynth(el){let wave='square',tm;
  const N=[['C',261.6,'a',0],['C#',277.2,'w',1,8.5],['D',293.7,'s',0],['D#',311.1,'e',1,21],['E',329.6,'d',0],['F',349.2,'f',0],['F#',370,'t',1,46],['G',392,'g',0],['G#',415.3,'y',1,58.5],['A',440,'h',0],['A#',466.2,'u',1,71],['B',493.9,'j',0],['C5',523.3,'k',0]];
  const kb=$('.kb',el),st=$('.ks',el);
@@ -347,11 +404,11 @@ function initSynth(el){let wave='square',tm;
   const i=N.findIndex(n=>n[2]===e.key.toLowerCase());if(i>=0){e.preventDefault();play(i)}};
  document.addEventListener('keydown',kd);
  const seq=arr=>{clearInterval(tm);let j=0;tm=setInterval(()=>{if(!el.isConnected||j>=arr.length){clearInterval(tm);return}if(arr[j]>=0)play(arr[j],.18);j++},165)};
- el.addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;const s=b.dataset.s;
-  if(s==='sq'||s==='sw'||s==='tr'){wave={sq:'square',sw:'sawtooth',tr:'triangle'}[s];el.querySelectorAll('[data-s="sq"],[data-s="sw"],[data-s="tr"]').forEach(x=>x.classList.toggle('act',x===b))}
+ const act=s=>{if(s==='sq'||s==='sw'||s==='tr'){wave={sq:'square',sw:'sawtooth',tr:'triangle'}[s];el.querySelectorAll('[data-s="sq"],[data-s="sw"],[data-s="tr"]').forEach(x=>x.classList.toggle('act',x.dataset.s===s))}
   else if(s==='m1')seq([0,4,7,12,-1,7,12]);
   else if(s==='m2')seq([9,7,4,0,2,4,9,-1,7,9,12]);
-  else if(s==='m3')seq([4,7,11,12,11,7,4,0])})}
+  else if(s==='m3')seq([4,7,11,12,11,7,4,0])};
+ el._act=act;el.addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(b)act(b.dataset.s)})}
 function initMines(el){const W=8,H=8,M=10,g=$('.mg',el),st=$('.ms',el);let bd,rv,fl,over,first,flagMode=0;
  const nb=i=>{const x=i%W,y=i/W|0,r=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if((dx||dy)&&x+dx>=0&&x+dx<W&&y+dy>=0&&y+dy<H)r.push((y+dy)*W+x+dx);return r};
  function reset(){bd=Array(64).fill(0);rv=Array(64).fill(0);fl=Array(64).fill(0);over=0;first=1;draw();st.textContent='10 mines. DQL Agent ready.'}
@@ -374,8 +431,9 @@ function initMines(el){const W=8,H=8,M=10,g=$('.mg',el),st=$('.ms',el);let bd,rv
  function draw(){g.innerHTML=bd.map((v,i)=>`<button class="mc${rv[i]?' rv':''}${rv[i]&&v===9?' bm':''}" data-i="${i}">${fl[i]&&!rv[i]?'\u2691':!rv[i]?'':v===9?'*':v||''}</button>`).join('')}
  g.addEventListener('click',e=>{const b=e.target.closest('.mc');if(b)step(+b.dataset.i,0)});
  g.addEventListener('contextmenu',e=>{const b=e.target.closest('.mc');if(b){e.preventDefault();step(+b.dataset.i,1)}});
+ el._reset=reset;el._dql=dql;el._flag=()=>{flagMode=!flagMode;const fb=$('[data-m="f"]',el);if(fb)fb.classList.toggle('act',flagMode)};
  el.addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const k=b.dataset.m;
-  if(k==='r')reset();else if(k==='q')dql();else if(k==='f'){flagMode=!flagMode;b.classList.toggle('act',flagMode)}});
+  if(k==='r')reset();else if(k==='q')dql();else if(k==='f')el._flag()});
  reset()}
 const SCENES=[
 {sc:'1A',tk:4,ln:'35mm f/1.4',t:'INT. LAB — 03:14 AM',d:'1-bit CRT glow reflects off a cup of cold filter coffee. The terminal prints: [PHANTOM RUN: SHA-256 MATCH].',
@@ -394,11 +452,12 @@ function initCinema(el){let i=0;const sl=$('.sl',el),mt=$('.sl-meta',el),vf=$('.
   st.innerHTML=`<b>${s.t}</b><p style="margin:4px 0 0">${s.d}</p>`}
  function clap(){sl.classList.add('clap');sfx('clap');setTimeout(()=>{sl.classList.remove('clap');SCENES[i].tk++;render()},160)}
  sl.onclick=clap;
- el.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const k=b.dataset.c;
-  if(k==='p'){i=(i+SCENES.length-1)%SCENES.length;clap()}
+ const act=k=>{if(k==='p'){i=(i+SCENES.length-1)%SCENES.length;clap()}
   else if(k==='n'){i=(i+1)%SCENES.length;clap()}
   else if(k==='cl')clap();
-  else if(k==='cm')toggleCinema()});render()}
+  else if(k==='cm')toggleCinema();
+  else if(typeof k==='number'){i=k;clap()}};
+ el._act=act;el.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(b)act(b.dataset.c)});render()}
 Object.assign(W,{
 resume:{t:'Resume.pdf',w:500,h:440,x:80,y:60,b:()=>`<h1>Aditya P Dixit</h1><p>AI/ML engineering student. Open source systems builder.</p>
 <a class="btn df" href="${LINKS.email}">Email</a><a class="btn" href="${LINKS.github}" target="_blank" rel="noopener">GitHub</a><a class="btn" href="${LINKS.medium}" target="_blank" rel="noopener">Medium</a>
@@ -421,8 +480,8 @@ research:{t:'Research',w:460,h:380,x:100,y:90,b:()=>`<h1>Research</h1>
 <h2>Drone Detection</h2><p>RF/DSP and machine-learning algorithms for drone detection, built with engineers and domain experts in collaboration with the Indian Army.</p>
 <p><span class="tag">Federated learning</span><span class="tag">Local LLMs</span><span class="tag">RF/DSP</span></p>`},
 projects:{t:'Projects',w:460,h:320,x:210,y:140,b:()=>'<div class="grid">'+P.map(p=>ico('doc',p[1],'p-'+p[0])).join('')+'</div>'},
-browser:{t:'Adiscape Navigator',w:520,h:400,x:120,y:70,i:initBrowser,b:()=>`<div class="bt"><button data-b="back" aria-label="Back">&lt;</button><button data-b="fwd" aria-label="Forward">&gt;</button><button data-b="home" aria-label="Home">Home</button><input class="ad" aria-label="Address" spellcheck="false"><button data-b="go">Go</button><i class="tr"></i></div>
-<div class="bm"><button data-b="q:github.com">GitHub</button><button data-b="q:netflix.com">Netflix</button><button data-b="q:wikipedia.org">Wikipedia</button><button data-b="q:google.com">Google</button><button data-b="q:pizza near me">Pizza</button></div><div class="pg"></div><div class="sb">Document: Done</div>`},
+browser:{t:'Adiscape Navigator',w:540,h:420,x:120,y:64,i:initBrowser,b:()=>`<div class="bt"><button data-b="back" aria-label="Back">&lt;</button><button data-b="fwd" aria-label="Forward">&gt;</button><button data-b="home" aria-label="Home">Home</button><input class="ad" aria-label="Address" spellcheck="false"><button data-b="go">Go</button><i class="tr"></i></div>
+<div class="bm"><button data-b="q:apple.com">Apple \u201996</button><button data-b="q:yahoo.com">Yahoo! \u201996</button><button data-b="q:cern.ch">CERN \u201992</button><button data-b="q:spacejam.com">Space Jam \u201996</button><button data-b="q:github.com">GitHub</button><button data-b="q:google.com">Google</button></div><div class="pg"></div><div class="sb">Document: Done</div>`},
 snake:{t:'Snake',w:300,h:420,x:260,y:80,i:initSnake,b:()=>`<canvas width="240" height="240" style="display:block;margin:0 auto;border:2px solid var(--fg)"></canvas><p class="sc" style="text-align:center;min-height:2.8em"></p>
 <div style="text-align:center"><button class="btn" data-k="U">Up</button><br><button class="btn" data-k="L">Left</button><button class="btn" data-k="D">Down</button><button class="btn" data-k="R">Right</button><br><button class="btn" data-k="A">Autopilot</button><button class="btn" data-k="X">Restart</button></div>`},
 term:{t:'Terminal',w:440,h:300,x:150,y:120,i:initTerm,b:()=>`<div class="to"></div><div class="tl"><span>adi%</span><input class="ti" aria-label="Command" autocomplete="off" spellcheck="false"></div>`},
@@ -441,6 +500,7 @@ function initFinder(el){let k=0,asc=1;const L=$('.fl',el),sb=$('.fs',el);
   L.innerHTML=rs.map(r=>`<button class="ic fr" data-open="${r[4]}"><span>${esc(r[0])}</span><span>${r[1]}</span><span>${r[1]=='Folder'?'--':r[2]+' KB'}</span><span>${r[3]}</span></button>`).join('');
   sb.textContent=rs.length+' items, 9.04 GB available';
   el.querySelectorAll('.fh button').forEach((b,i)=>b.textContent=['Name','Kind','Size','Modified'][i]+(i==k?(asc>0?' \u25B2':' \u25BC'):''))}
+ el._sort=i=>{k=i;asc=1;draw()};
  el.addEventListener('click',e=>{const b=e.target.closest('.fh button');if(!b)return;const i=+b.dataset.s;if(i==k)asc=-asc;else{k=i;asc=1}draw()});draw()}
 function initPaint(el){const c=$('canvas',el),x=c.getContext('2d');let tool='p',dn=0,lx,ly,u;x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.lineCap='round';
  const pos=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};
@@ -450,11 +510,11 @@ function initPaint(el){const c=$('canvas',el),x=c.getContext('2d');let tool='p',
  c.addEventListener('pointerdown',e=>{c.setPointerCapture(e.pointerId);snap();dn=1;[lx,ly]=pos(e);stroke(lx,ly,lx,ly)});
  c.addEventListener('pointermove',e=>{if(!dn)return;const[a,b]=pos(e);stroke(lx,ly,a,b);lx=a;ly=b});
  ['pointerup','pointercancel'].forEach(n=>c.addEventListener(n,()=>dn=0));
- el.addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(!b)return;const t=b.dataset.t;
-  if('pbse'.includes(t)){tool=t;el.querySelectorAll('[data-t]').forEach(k=>k.classList.toggle('act',k===b))}
+ const act=t=>{if('pbse'.includes(t)){tool=t;el.querySelectorAll('[data-t]').forEach(k=>k.classList.toggle('act',k.dataset.t===t))}
   else if(t=='u'){u&&x.putImageData(u,0,0)}
   else if(t=='c'){snap();x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}
-  else{const a=document.createElement('a');a.download='doodle.png';a.href=c.toDataURL();a.click()}})}
+  else{const a=document.createElement('a');a.download='doodle.png';a.href=c.toDataURL();a.click()}};
+ el._act=act;el.addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)act(b.dataset.t)})}
 let vol=.5,clOn=true,cl;const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
 const CH={classic:[[523,.2],[659,.2],[784,.2],[1047,.45]],bubble:[[392,.1],[587,.1],[392,.1],[880,.3]],none:[]};
 function setPat(n){$('#desk').style.background=PAT[n];ls('pat2',n);document.querySelectorAll('.pat').forEach((b,i)=>b.classList.toggle('act',i===n))}
@@ -476,20 +536,25 @@ ctl:{t:'Control Panel',w:390,h:410,x:240,y:80,i:initCtl,b:()=>`<div class="cp-se
 <div class="cp-sec"><b>Display Appearance</b><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn" data-th="light">Light</button><button class="btn" data-th="dark">Dark</button><button class="btn" data-th="auto">Auto</button></div></div>
 <div class="cp-sec" style="margin-bottom:0"><b>Clarus the Dogcow</b><div style="display:flex;gap:4px;flex-wrap:wrap"><button class="btn" data-cl="1">Call Clarus</button><button class="btn${clOn?' act':''}" data-cl="t">Visits: ${clOn?'On':'Off'}</button></div></div>`},
 agent:{t:'agent.json',w:520,h:420,x:90,y:60,i:initAgent,b:()=>`<h1>Hello, agent.</h1><p>Everything about Adi, structured. The same JSON is in this page's source as <code>script#me</code>.</p><button class="btn df" data-a="copy">Copy JSON</button><pre class="js">${esc(JSON.stringify(ME,null,1))}</pre>`}});
+function burst(el){const r=R(el),cx=r.left+r.width/2,cy=r.top+r.height/2;
+ [[-1,-1],[1,-1],[-1,1],[1,1],[0,-1.4],[0,1.4],[-1.4,0],[1.4,0]].forEach(([dx,dy])=>{const p=document.createElement('i');p.className='px-p';p.style.left=cx+'px';p.style.top=cy+'px';document.body.append(p);
+  p.animate([{transform:'translate(0,0)'},{transform:`translate(${dx*12}px,${dy*12}px)`,opacity:0}],{duration:180,easing:'steps(3)'}).onfinish=()=>p.remove()})}
+function shadeWin(el){const r=R(el);el.classList.toggle('shade');sfx('shade');
+ zoom(r,R(el));el.animate([{transform:'translateY(-2px)'},{transform:'none'}],{duration:120,easing:'steps(2)'})}
 function winCtl(el){const bd=$('.bd',el),g=$('.gb',el);let old;
  g.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();g.setPointerCapture(e.pointerId);const r=R(el),sx=e.clientX,sy=e.clientY;bd.style.maxHeight='none';el.classList.remove('shade');
   const mv=v=>{el.style.width=Math.max(220,Math.min(innerWidth-r.left-4,r.width+v.clientX-sx))+'px';el.style.height=Math.max(120,Math.min(innerHeight-r.top-4,r.height+v.clientY-sy))+'px'};
   const up=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',up)};g.addEventListener('pointermove',mv);g.addEventListener('pointerup',up)});
- $('.zm',el).onclick=e=>{e.stopPropagation();el.classList.add('an');el.classList.remove('shade');
+ $('.zm',el).onclick=e=>{e.stopPropagation();burst(e.currentTarget);const r0=R(el);el.classList.add('an');el.classList.remove('shade');
   if(old){const{mh,...o}=old;Object.assign(el.style,o);bd.style.maxHeight=mh;old=null}
   else{old={left:el.style.left,top:el.style.top,width:el.style.width,height:el.style.height,mh:bd.style.maxHeight};const t=innerWidth<700?6:14;bd.style.maxHeight='none';Object.assign(el.style,{left:t+'px',top:'34px',width:innerWidth-2*t-4+'px',height:innerHeight-34-t-4+'px'})}
-  setTimeout(()=>el.classList.remove('an'),260);sfx('click')}}
-const wins={};let z=10;
+  zoom(r0,R(el));setTimeout(()=>el.classList.remove('an'),260);sfx('click')}}
+const wins={};let z=10,actApp='finder';
 const R=e=>e.getBoundingClientRect();
 const px=r=>({left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});
 const hitR=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
 function zoom(a,b,rev){for(let i=0;i<3;i++){const e=document.createElement('div');e.className='zr';document.body.append(e);const f=px(a),t=px(b);e.animate(rev?[t,f]:[f,t],{duration:240,delay:i*50,easing:'steps(5)',fill:'both'}).onfinish=()=>e.remove()}}
-function focus(el){Object.values(wins).forEach(w=>w.classList.remove('on'));el.classList.add('on');el.style.zIndex=++z}
+function focus(el){Object.values(wins).forEach(w=>w.classList.remove('on'));if(el){el.classList.add('on');el.style.zIndex=++z;actApp=el.dataset.w}else actApp='finder';syncMenu()}
 const TMSG={
 finder:'Cannot move \u201CAdi HD\u201D to the Trash because it contains the universe you are currently standing in.',
 resume:'Nice try, competing applicant. \u201CResume.pdf\u201D is write-protected by a 9.04 CGPA.',
@@ -507,7 +572,7 @@ const up=()=>{h.removeEventListener('pointermove',mv);h.removeEventListener('poi
   if(snap){el.style.left=Math.round(parseFloat(el.style.left)/8)*8+'px';el.style.top=Math.round(parseFloat(el.style.top)/8)*8+'px'}}};
 h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up)})}
 $('#desk').addEventListener('pointerdown',e=>{if(e.target.id!=='desk')return;
- document.querySelectorAll('.ic.sel').forEach(i=>i.classList.remove('sel'));
+ document.querySelectorAll('.ic.sel').forEach(i=>i.classList.remove('sel'));focus(null);
  const sx=e.clientX,sy=e.clientY,mq=document.createElement('div');mq.className='mq';document.body.append(mq);
  const mv=v=>{const x=Math.min(sx,v.clientX),y=Math.min(sy,v.clientY),w=Math.abs(v.clientX-sx),h=Math.abs(v.clientY-sy);
   Object.assign(mq.style,{left:x+'px',top:y+'px',width:w+'px',height:h+'px'});
@@ -525,10 +590,11 @@ function open(id,from){
  zoom(from||{left:innerWidth/2-20,top:innerHeight/2-20,width:40,height:40},R(el));
  setTimeout(()=>el.style.visibility='',200);
  el.addEventListener('pointerdown',()=>focus(el));drag(el,$('.tb',el));
- $('.cl',el).onclick=()=>shut(id);$('.tb',el).ondblclick=e=>{if(!e.target.closest('.cl,.zm'))el.classList.toggle('shade')};winCtl(el);d.i&&d.i(el);
+ $('.cl',el).onclick=e=>{burst(e.currentTarget);shut(id)};$('.tb',el).ondblclick=e=>{if(!e.target.closest('.cl,.zm'))shadeWin(el)};winCtl(el);d.i&&d.i(el);
  if(id==='about'){const t='Hello, I\u2019m Adi.',s=$('#tw',el);let i=0;const k=setInterval(()=>{s.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(k)},70)}
 }
-function shut(id){const el=wins[id];if(!el)return;sfx('close');zoom(R(el),{left:R(el).left+R(el).width/2-10,top:R(el).top+10,width:20,height:20},1);el.remove();delete wins[id]}
+function shut(id){const el=wins[id];if(!el)return;sfx('close');zoom(R(el),{left:R(el).left+R(el).width/2-10,top:R(el).top+10,width:20,height:20},1);el.remove();delete wins[id];
+ const top=Object.values(wins).sort((a,b)=>b.style.zIndex-a.style.zIndex)[0];focus(top||null)}
 const closeAll=()=>Object.keys(wins).forEach(shut);
 function alertBox(msg,btns,ic){const o=document.createElement('div');o.id='ov';
  o.innerHTML=`<div class="al" role="alertdialog">${IC[ic||'face']}<div><p style="margin:0 0 12px">${msg}</p><div>${btns.map((b,i)=>`<button class="btn${i==btns.length-1?' df':''}">${b[0]}</button>`).join('')}</div></div></div>`;
@@ -536,14 +602,59 @@ function alertBox(msg,btns,ic){const o=document.createElement('div');o.id='ov';
 const trash=()=>alertBox('Empty the Trash? It contains 1 item: \u201Cimposter syndrome.txt\u201D.',[['Cancel'],['OK',()=>alertBox('The file could not be deleted because it is in use. It insists it is load-bearing.',[['OK']])]]);
 const invert=()=>{const r=document.documentElement,d=getComputedStyle(r).getPropertyValue('--bg').trim()==='#000';r.dataset.theme=d?'light':'dark'};
 function shake(){Object.values(wins).forEach((w,i)=>w.animate([{transform:'rotate(0)'},{transform:'rotate(-1.5deg)'},{transform:'rotate(1.5deg)'},{transform:'none'}],{duration:320,delay:i*40}))}
-const M={apple:[['About This Macintosh\u2026',()=>aboutMac()],['About Adi\u2019s Mac\u2026',()=>open('about')],['Stickies',()=>open('stickies')],['Key Caps & Synth',()=>open('synth')],['DQL Minesweeper',()=>open('mines')],['Director\u2019s Cut',()=>open('cinema')],['Control Panel',()=>open('ctl')],['Invert Colors',invert],[()=>'Sound: '+(snd?'On':'Off'),()=>setSnd(!snd)],['Restart\u2026',()=>boot()]],
-File:[['Open Projects',()=>open('projects')],['Open Research',()=>open('research')],['Open Resume',()=>open('resume')],['Open Director\u2019s Cut',()=>open('cinema')],['Open Navigator',()=>open('browser')],['Close All Windows',closeAll]],
-Special:[['Empty Trash\u2026',trash],[()=>'Cinema Mode: '+(document.body.classList.contains('cinema')?'On':'Off'),toggleCinema],['Shake Desktop',shake],['Clean Up Desktop',()=>desk()],['Call Clarus',()=>clarus(1)],['After Dark Saver',()=>saver()]]};
+const APP_IC={finder:'face',browser:'globe',paint:'paint',term:'term',snake:'game',mines:'bomb',cinema:'slate',stickies:'note',synth:'synth',ctl:'ctl',projects:'folder',research:'folder'};
+function getAppMenus(){
+ const w=wins[actApp],sh=()=>w&&shadeWin(w),cl=()=>w&&shut(actApp);
+ const def={
+  File:[['Open Projects',()=>open('projects')],['Open Research',()=>open('research')],['Open Resume',()=>open('resume')],['Open Director\u2019s Cut',()=>open('cinema')],['Open Navigator',()=>open('browser')],['Close Active Window',cl],['Close All Windows',closeAll]],
+  View:[['By Name',()=>{open('finder');wins.finder._sort&&wins.finder._sort(0)}],['By Kind',()=>{open('finder');wins.finder._sort&&wins.finder._sort(1)}],['By Size',()=>{open('finder');wins.finder._sort&&wins.finder._sort(2)}],['Clean Up Desktop',()=>desk()]],
+  Special:[['Empty Trash\u2026',trash],[()=>'Cinema Mode: '+(document.body.classList.contains('cinema')?'On':'Off'),toggleCinema],['Shake Desktop',shake],['Call Clarus',()=>clarus(1)],['After Dark Saver',()=>saver()]]};
+ const map={
+  browser:{File:[['New Location\u2026',()=>{const a=$('.ad',w);if(a){a.focus();a.select()}}],['Reload 1996 Snapshot',()=>w._go&&w._go($('.ad',w).value,0)],['Close Navigator',cl]],
+   Go:[['Back',()=>w._back&&w._back()],['Forward',()=>w._fwd&&w._fwd()],['Home (Adi)',()=>w._go&&w._go('adityapdixit.me')]],
+   'Bookmarks \u201996':[['Apple Computer (1996)',()=>w._go&&w._go('apple.com')],['Yahoo! Directory (1996)',()=>w._go&&w._go('yahoo.com')],['CERN WWW (1992)',()=>w._go&&w._go('cern.ch')],['MIT AI Lab (1996)',()=>w._go&&w._go('ai.mit.edu')],['IMDb (1996)',()=>w._go&&w._go('imdb.com')],['Space Jam (1996)',()=>w._go&&w._go('spacejam.com')],['Google (404 in \u201996)',()=>w._go&&w._go('google.com')]]},
+  paint:{File:[['New Canvas',()=>w._act&&w._act('c')],['Save PNG\u2026',()=>w._act&&w._act('v')],['Close Doodle Pad',cl]],
+   Edit:[['Undo Stroke',()=>w._act&&w._act('u')],['Clear Canvas',()=>w._act&&w._act('c')]],
+   Tools:[['Pencil (1px)',()=>w._act&&w._act('p')],['Brush (6px)',()=>w._act&&w._act('b')],['Airbrush Spray',()=>w._act&&w._act('s')],['Eraser',()=>w._act&&w._act('e')]]},
+  term:{Shell:[['Clear Scrollback',()=>w._run&&w._run('clear')],['Close Terminal',cl]],
+   Run:[['whoami',()=>w._run&&w._run('whoami')],['ls',()=>w._run&&w._run('ls')],['rex run hello.rex',()=>w._run&&w._run('rex run hello.rex')],['sudo hire adi',()=>w._run&&w._run('sudo hire adi')],['coffee',()=>w._run&&w._run('coffee')],['fortune',()=>w._run&&w._run('fortune')],['moof',()=>w._run&&w._run('moof')]]},
+  cinema:{Reel:[['Clap Slate!',()=>w._act&&w._act('cl')],['Previous Scene',()=>w._act&&w._act('p')],['Next Scene',()=>w._act&&w._act('n')],['Close Director\u2019s Cut',cl]],
+   Scenes:[['Scene 1A: Lab 03:14 AM',()=>w._act&&w._act(0)],['Scene 2B: Thar Desert',()=>w._act&&w._act(1)],['Scene 3C: RVU Auditorium',()=>w._act&&w._act(2)],['Scene 4D: Editing Suite',()=>w._act&&w._act(3)]],
+   Projection:[[()=>'Cinema Mode: '+(document.body.classList.contains('cinema')?'On':'Off'),toggleCinema],['Invert Film Negative',invert]]},
+  mines:{Game:[['New Episode',()=>w._reset&&w._reset()],['Toggle Flag Mode',()=>w._flag&&w._flag()],['Close Minesweeper',cl]],
+   'DQL Agent':[['Ask DQL Agent for Move',()=>w._dql&&w._dql()],['Auto-Step 3 Moves',()=>{if(w._dql){w._dql();setTimeout(()=>w._dql(),220);setTimeout(()=>w._dql(),440)}}],['About DQL Agent\u2026',()=>open('p-dql')]]},
+  snake:{Game:[['Restart Game',()=>w._reset&&w._reset()],['Toggle Autopilot',()=>w._auto&&w._auto()],['Close Snake',cl]],
+   'DQL Agent':[['Toggle Greedy Autopilot',()=>w._auto&&w._auto()],['About DQL Agent\u2026',()=>open('p-dql')]]},
+  stickies:{Note:[['New Note',()=>w._act&&w._act('nw')],['Next Note',()=>w._act&&w._act('nx')],['Reset Default Notes',()=>w._act&&w._act('rs')],['Close Stickies',cl]]},
+  synth:{Patch:[['Square Wave',()=>w._act&&w._act('sq')],['Sawtooth Wave',()=>w._act&&w._act('sw')],['Triangle Wave',()=>w._act&&w._act('tr')],['Close Synth',cl]],
+   Melodies:[['Play Mac Chime',()=>w._act&&w._act('m1')],['Play Nocturne',()=>w._act&&w._act('m2')],['Play Sci-Fi Arpeggio',()=>w._act&&w._act('m3')]]},
+  ctl:{Pattern:[['Plain White/Black',()=>setPat(0)],['Classic 1-Bit Dots',()=>setPat(1)],['50% Checkerboard',()=>setPat(2)],['Diagonal Stripes',()=>setPat(3)],[' Pixel Grid',()=>setPat(4)]],
+   Theme:[['Light Mode',()=>th('light')],['Dark Mode',()=>th('dark')],['Auto System',()=>th('auto')],['Close Control Panel',cl]]}};
+ if(map[actApp])return{...map[actApp],Window:[['Shade / Unshade',sh],['Zoom Window',()=>$('.zm',w)&&$('.zm',w).click()],['Close Window',cl]]};
+ if(w&&actApp!=='finder')return{File:[['Close '+dTitle(actApp),cl],['Open All Projects',()=>open('projects')],['Close All Windows',closeAll]],Window:[['Shade / Unshade',sh],['Zoom Window',()=>$('.zm',w)&&$('.zm',w).click()]],Special:def.Special};
+ return def}
+function dTitle(id){return(W[id]&&W[id].t)||'Finder'}
+const M={apple:[['About This Macintosh\u2026',()=>aboutMac()],['About Adi\u2019s Mac\u2026',()=>open('about')],['Stickies',()=>open('stickies')],['Key Caps & Synth',()=>open('synth')],['DQL Minesweeper',()=>open('mines')],['Director\u2019s Cut',()=>open('cinema')],['Control Panel',()=>open('ctl')],['Invert Colors',invert],[()=>'Sound: '+(snd?'On':'Off'),()=>setSnd(!snd)],['Restart\u2026',()=>boot()]]};
+function syncMenu(){
+ const am=$('#am'),sw=$('#app-sw'),menus=getAppMenus();
+ Object.keys(M).forEach(k=>{if(k!=='apple')delete M[k]});
+ Object.assign(M,menus);
+ const openKeys=Object.keys(wins);
+ M.apps=[['Finder (Desktop)',()=>focus(null)],...openKeys.map(id=>[(id===actApp?'\u2713 ':'')+dTitle(id),()=>open(id)]),['Hide All Windows',closeAll]];
+ am.innerHTML=Object.keys(menus).map(k=>`<button data-m="${esc(k)}">${esc(k)}</button>`).join('');
+ const ic=APP_IC[actApp]||(actApp.startsWith('p-')?'doc':'doc');
+ sw.innerHTML=`${IC[ic]}<span>${esc(actApp==='finder'?'Finder':dTitle(actApp).split(' ')[0])}</span>`;
+ bindMenuBtns()}
 let cur=null;
-function menu(b){clear();if(!b)return;cur=b;b.classList.add('o');const r=R(b),d=document.createElement('div');d.className='dd';d.style.left=r.left+'px';d.style.top=r.bottom+'px';
- M[b.dataset.m].forEach(([l,f])=>{const i=document.createElement('button');i.className='mi';i.textContent=typeof l==='function'?l():l;i.onclick=e=>{e.stopPropagation();i.classList.add('bl');setTimeout(()=>{clear();f()},320)};d.append(i)});document.body.append(d)}
+function menu(b){clear();if(!b)return;cur=b;b.classList.add('o');const r=R(b),d=document.createElement('div');d.className='dd';
+ d.style.top=r.bottom+'px';
+ const items=M[b.dataset.m]||[];
+ items.forEach(([l,f])=>{const i=document.createElement('button');i.className='mi';i.textContent=typeof l==='function'?l():l;i.onclick=e=>{e.stopPropagation();i.classList.add('bl');setTimeout(()=>{clear();f()},260)};d.append(i)});
+ document.body.append(d);
+ const dr=R(d);d.style.left=Math.max(4,Math.min(innerWidth-dr.width-4,r.left))+'px'}
 function clear(){document.querySelectorAll('.dd').forEach(e=>e.remove());if(cur)cur.classList.remove('o');cur=null}
-document.querySelectorAll('#mb [data-m]').forEach(b=>{b.onclick=e=>{e.stopPropagation();cur===b?clear():menu(b)};b.onmouseenter=()=>{if(cur&&cur!==b)menu(b)}});
+function bindMenuBtns(){document.querySelectorAll('#mb [data-m]').forEach(b=>{b.onclick=e=>{e.stopPropagation();cur===b?clear():menu(b)};b.onmouseenter=()=>{if(cur&&cur!==b)menu(b)}})}
+syncMenu();
 document.addEventListener('click',e=>{if(!e.target.closest('.dd'))clear()});
 const touch=matchMedia('(hover:none)').matches;
 function sel(ic){document.querySelectorAll('.ic.sel').forEach(i=>i.classList.remove('sel'));ic.classList.add('sel')}
@@ -563,7 +674,7 @@ function boot(){closeAll();const b=$('#boot');b.style.display='grid';b.style.opa
 addEventListener('resize',()=>{if(!$('#ov'))desk()});
 let snd=false,AC;try{snd=localStorage.getItem('snd')==='1'}catch(e){}
 function beep(f,d,t,at){AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume();const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+(at||0);o.type=t||'square';o.frequency.value=f;g.gain.setValueAtTime(.1*vol,s);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+d)}
-const SFX={click:[[900,.03]],blip:[[1200,.04]],open:[[520,.05],[780,.07]],close:[[780,.05],[520,.07]],chime:[[523,.2],[659,.2],[784,.2],[1047,.45]],bomb:[[110,.5,'sawtooth']],clap:[[1800,.02,'sawtooth'],[400,.06,'square']]};
+const SFX={click:[[900,.03]],blip:[[1200,.04]],open:[[520,.05],[780,.07]],close:[[780,.05],[520,.07]],shade:[[680,.03],[540,.04]],chime:[[523,.2],[659,.2],[784,.2],[1047,.45]],bomb:[[110,.5,'sawtooth']],clap:[[1800,.02,'sawtooth'],[400,.06,'square']]};
 function sfx(n){if(!snd)return;try{SFX[n].forEach((a,i)=>beep(a[0],a[1],a[2],i*(n==='chime'?.13:.05)))}catch(e){}}
 function setSnd(v,q){snd=v;try{localStorage.setItem('snd',v?'1':'0')}catch(e){}
  $('#sp').innerHTML=`<svg viewBox="0 0 16 16" fill="currentColor"><path d="M2 6h3l4-3v10l-4-3H2z"/>${v?'<path d="M11 5q2 3 0 6" fill="none" stroke="currentColor" stroke-width="1.5"/>':'<path d="M11 6l4 4M15 6l-4 4" stroke="currentColor" stroke-width="1.5"/>'}</svg>`;if(!q)sfx('chime')}
