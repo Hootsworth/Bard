@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adi — Mac OS 9.2 Platinum</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:wght@400;600&family=VT323&display=swap">
+<style>
+:root{
+ --desk:#3b6ea5;--win:#dedede;--bd:#ffffff;--fg:#111111;--sub:#555555;
+ --hi:#ffffff;--sh:#888888;--dk:#222222;--acc:#333399;--acc-fg:#ffffff;
+ --tb-a:linear-gradient(180deg,#eeeeee,#cccccc);--tb-i:#dddddd;
+ box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)
+}
+:root[data-theme="dark"]{
+ --desk:#1b2636;--win:#2c2e33;--bd:#1e2024;--fg:#f0f0f0;--sub:#aaaaaa;
+ --hi:#484b52;--sh:#151619;--dk:#050507;--acc:#4a6ee0;--acc-fg:#ffffff;
+ --tb-a:linear-gradient(180deg,#3a3d45,#25272c);--tb-i:#26282e
+}
+html{height:100%}
+*{box-sizing:border-box}
+body{margin:0;height:100%;overflow:hidden;background:var(--desk);color:var(--fg);font:14px/1.45 'Lucida Grande','Geneva','Trebuchet MS',sans-serif;user-select:none}
+#desk{position:fixed;inset:0;background:radial-gradient(circle at 25% 20%,rgba(255,255,255,.18),transparent 55%),repeating-linear-gradient(135deg,rgba(255,255,255,.04) 0 2px,transparent 2px 6px),var(--desk);cursor:default}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px dotted var(--acc);outline-offset:1px}
+#mb{position:fixed;top:0;left:0;right:0;z-index:1000;height:calc(26px + env(safe-area-inset-top,0px));padding-top:env(safe-area-inset-top,0px);background:linear-gradient(180deg,var(--hi),var(--win));border-bottom:1px solid var(--dk);box-shadow:inset 0 -1px 0 var(--sh);display:flex;align-items:stretch;border-top-left-radius:7px;border-top-right-radius:7px}
+#mb>button{padding:0 11px;font-weight:700;font-size:13px}
+#mb>button svg{width:15px;height:16px;display:block}
+#mb>button.o,.mi:hover,.mi.bl{background:var(--acc);color:var(--acc-fg)}
+#am{display:flex;align-items:stretch;overflow-x:auto;scrollbar-width:none}
+#am::-webkit-scrollbar{display:none}
+#am>button{padding:0 10px;font-weight:700;font-size:13px;white-space:nowrap;animation:mbi .12s ease-out}
+#am>button.o{background:var(--acc);color:var(--acc-fg)}
+@keyframes mbi{from{transform:translateY(-3px);opacity:0}}
+#sp{margin-left:auto;padding:0 8px!important}
+#clk{padding:0 10px;display:flex;align-items:center;font-weight:700;font-size:13px}
+#app-sw{padding:0 10px!important;display:flex;align-items:center;gap:6px;border-left:2px groove var(--hi);font-weight:700;font-size:13px;white-space:nowrap;background:rgba(0,0,0,.04)}
+#app-sw svg{width:16px;height:16px}
+.dd{position:fixed;z-index:1001;background:var(--win);border:1px solid var(--dk);box-shadow:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--sh),3px 3px 6px rgba(0,0,0,.4);min-width:200px;padding:3px 0}
+.mi{display:block;width:100%;text-align:left;padding:3px 16px;font-size:13px;font-weight:600}
+.mi.bl{animation:bl .14s steps(1) 2}
+@keyframes bl{50%{background:var(--win);color:var(--fg)}}
+.ic{position:absolute;width:86px;display:flex;flex-direction:column;align-items:center;gap:3px;text-align:center;touch-action:none;transition:left .12s ease,top .12s ease}
+.ic.drg{transition:none;opacity:.75}
+.ic svg{width:42px;height:42px;filter:drop-shadow(1px 2px 1px rgba(0,0,0,.35))}
+.ic span{background:rgba(255,255,255,.82);color:#000;border:1px solid rgba(0,0,0,.3);border-radius:3px;padding:0 5px;font-size:12px;font-weight:600;line-height:1.25}
+:root[data-theme="dark"] .ic span{background:rgba(20,22,28,.85);color:#fff}
+.ic.sel svg{filter:brightness(.8) drop-shadow(0 0 3px var(--acc))}
+.ic.sel span,.ic.drop span{background:var(--acc);color:#fff;border-color:#fff}
+.ic:hover svg{transform:translateY(-2px)}
+.win{position:absolute;background:var(--win);border:1px solid var(--dk);box-shadow:inset 1px 1px 0 var(--hi),inset -1px -1px 0 var(--sh),4px 6px 14px rgba(0,0,0,.42);display:flex;flex-direction:column;max-width:calc(100vw - 12px);padding:0 5px 5px}
+.tb{height:24px;background:var(--tb-i);display:flex;align-items:center;gap:5px;padding:0 2px;cursor:grab;touch-action:none;user-select:none}
+.win.on .tb{background:var(--tb-a)}
+.win.drg{opacity:.9}
+.st{flex:1;height:11px;background:repeating-linear-gradient(180deg,#777 0 1px,#fff 1px 2px,transparent 2px 3px);opacity:.25}
+.win.on .st{opacity:.85}
+.tb b{padding:0 6px;font-weight:700;font-size:13px;white-space:nowrap;text-shadow:0 1px 0 var(--hi)}
+.cl,.zm,.shd{width:13px;height:13px;border:1px solid var(--dk);background:linear-gradient(135deg,var(--hi),#aaa);box-shadow:inset 1px 1px 0 var(--hi),inset -1px -1px 0 #666;padding:0;flex:none;position:relative}
+.cl:hover,.zm:hover,.shd:hover{filter:brightness(1.1)}
+.cl:active,.zm:active,.shd:active{background:#888;box-shadow:inset 1px 1px 0 #444}
+.zm::after{content:"";position:absolute;inset:1px 4px 4px 1px;border-right:1px solid var(--dk);border-bottom:1px solid var(--dk)}
+.shd::after{content:"";position:absolute;left:1px;right:1px;top:4px;height:3px;border-top:1px solid var(--dk);border-bottom:1px solid var(--dk)}
+.bd{overflow:auto;padding:14px 16px;line-height:1.5;background:var(--bd);border:1px solid var(--dk);box-shadow:inset 1px 1px 0 var(--sh);user-select:text}
+.bd::-webkit-scrollbar{width:15px;background:var(--win);border-left:1px solid var(--dk)}
+.bd::-webkit-scrollbar-thumb{background:linear-gradient(90deg,#c5cef0,#798ee6);border:1px solid var(--dk);box-shadow:inset 1px 1px 0 #fff}
+.bd h1{font-size:21px;margin:0 0 6px;line-height:1.15;color:var(--acc)}
+:root[data-theme="dark"] .bd h1{color:#8ab4f8}
+.bd h2{font-size:15px;margin:13px 0 4px;border-bottom:2px groove var(--hi);padding-bottom:2px}
+.bd p{margin:6px 0}
+.cur{display:inline-block;width:7px;height:14px;background:var(--acc);vertical-align:-2px;animation:cu 1s steps(1) infinite}
+@keyframes cu{50%{opacity:0}}
+.grid{display:flex;flex-wrap:wrap;gap:14px}
+.grid .ic{position:static}
+.grid .ic span{background:transparent;color:var(--fg);border:0}
+.row{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid rgba(128,128,128,.3)}
+.row i{font-style:normal;color:var(--sub);font-weight:600;min-width:96px}
+.tag{border:1px solid var(--sh);background:var(--win);border-radius:4px;padding:1px 7px;margin:2px 4px 2px 0;display:inline-block;font-size:12px;font-weight:600;box-shadow:inset 1px 1px 0 var(--hi)}
+.btn{border:1px solid var(--dk);border-radius:4px;padding:3px 13px;background:linear-gradient(180deg,#fcfcfc,#d2d2d2);color:#111;font-weight:600;font-size:13px;box-shadow:inset 1px 1px 0 #fff,inset -1px -1px 0 #999,0 1px 1px rgba(0,0,0,.2);margin:4px 6px 0 0;display:inline-block;text-decoration:none}
+.btn:hover{background:linear-gradient(180deg,#fff,#e2e2e2)}
+.btn:active,.btn.act{background:linear-gradient(180deg,#888,#bbb);color:#fff;box-shadow:inset 1px 1px 2px #333}
+.btn.df{border:2px solid var(--dk);outline:1px solid var(--acc);background:linear-gradient(180deg,#e8edff,#b5c4f7);color:#000}
+.zr{position:fixed;border:1px dotted #fff;z-index:900;pointer-events:none}
+#ov{position:fixed;inset:0;z-index:2000;display:grid;place-items:center;background:rgba(0,0,0,.45);backdrop-filter: blur(1px);overflow:auto;padding:12px}
+.al{background:var(--win);border:2px solid var(--dk);box-shadow:inset 2px 2px 0 var(--hi),inset -2px -2px 0 var(--sh),0 8px 24px rgba(0,0,0,.5);padding:16px;max-width:min(430px,92vw);display:flex;gap:14px}
+.al svg{width:46px;height:46px;flex:none}
+.al div:last-child{text-align:right}
+#boot{position:fixed;inset:0;z-index:5000;background:#3b6ea5;display:grid;place-items:center;text-align:center;cursor:wait}
+.boot-card{background:#f4f4f4;color:#111;border:2px solid #000;box-shadow:inset 2px 2px 0 #fff,0 10px 30px rgba(0,0,0,.5);padding:24px 36px;border-radius:6px;max-width:380px}
+.boot-card svg{width:84px;height:84px}
+#bar{width:210px;height:13px;border:1px solid #000;background:#ccc;margin:12px auto 0;box-shadow:inset 1px 1px 2px #666}
+#bar i{display:block;height:100%;background:repeating-linear-gradient(-45deg,#333399 0 6px,#5b7be8 6px 12px);width:0;transition:width 1.4s linear}
+#ext{position:absolute;bottom:calc(20px + env(safe-area-inset-bottom,0px));left:0;right:0;display:flex;justify-content:center;gap:8px}
+#ext svg{width:32px;height:32px;filter:drop-shadow(1px 2px 2px rgba(0,0,0,.4))}
+.win.shade .bd,.win.shade .gb{display:none}
+.win.shade{height:auto!important;padding-bottom:2px}
+.win[data-w=browser] .bd,.win[data-w=finder] .bd{padding:0}
+.bt{position:sticky;top:0;z-index:2;display:flex;gap:5px;align-items:center;padding:6px;background:var(--win);border-bottom:1px solid var(--dk)}
+.bt button,.bm button{border:1px solid var(--dk);border-radius:3px;padding:2px 8px;background:linear-gradient(180deg,#fff,#ccc);color:#111;font-size:12px;font-weight:600}
+.ad,.ti{flex:1;min-width:0;font:inherit;border:1px solid var(--dk);background:var(--bd);color:var(--fg);padding:2px 6px;box-shadow:inset 1px 1px 2px rgba(0,0,0,.2)}
+.ti{border:0;outline:0;box-shadow:none}
+.bm{display:flex;gap:4px;flex-wrap:wrap;padding:4px 6px;background:var(--win);border-bottom:1px solid var(--dk)}
+.pg{padding:14px 16px;min-height:170px}
+.pg a{color:var(--acc);font-weight:700;text-decoration:underline}
+:root[data-theme="dark"] .pg a{color:#8ab4f8}
+.sb{position:sticky;bottom:0;border-top:1px solid var(--dk);background:var(--win);padding:2px 8px;font-size:12px}
+.tr{width:18px;height:18px;border:1px solid var(--dk);background:radial-gradient(circle,#6cf,#249);flex:none;border-radius:3px}
+.ld .tr{animation:tr .4s linear infinite}
+@keyframes tr{50%{filter:hue-rotate(120deg) brightness(1.3)}}
+.to{white-space:pre-wrap;min-height:110px;font-family:'Courier New',monospace;font-size:13px}
+.tl{display:flex;gap:6px;font-family:'Courier New',monospace}
+.win .bd{flex:1 1 auto;min-height:0}
+.win.an{transition:left .2s ease,top .2s ease,width .2s ease,height .2s ease}
+.gb{position:absolute;right:5px;bottom:5px;width:15px;height:15px;cursor:nwse-resize;touch-action:none;background:repeating-linear-gradient(135deg,transparent 0 2px,#666 2px 3px,#fff 3px 4px);border-left:1px solid var(--dk);border-top:1px solid var(--dk);background-color:var(--win)}
+.ic.fr{position:static;width:100%;display:grid;grid-template-columns:2fr 1.1fr .8fr 1fr;flex-direction:initial;align-items:center;text-align:left;gap:0;padding:3px 10px;border-bottom:1px solid rgba(128,128,128,.2)}
+.ic.fr:nth-child(even){background:rgba(128,128,128,.08)}
+.fr span{font-size:13px;background:transparent!important;color:var(--fg)!important;border:0!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.fh{display:grid;grid-template-columns:2fr 1.1fr .8fr 1fr;border-bottom:1px solid var(--dk);position:sticky;top:0;background:var(--win)}
+.fh button{text-align:left;padding:3px 10px;font-weight:700;font-size:12px;border-right:1px solid var(--sh)}.fh button:hover{background:var(--acc);color:#fff}
+.fs{border-top:1px solid var(--dk);padding:2px 10px;font-size:12px;position:sticky;bottom:0;background:var(--win)}
+.pt{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;align-items:center}.pt .btn{margin:0}
+.sw-c{width:20px;height:20px;border:1px solid #000;border-radius:3px;box-shadow:inset 1px 1px 0 rgba(255,255,255,.5)}
+.sw-c.act{outline:2px solid var(--acc);outline-offset:1px}
+.cv{width:100%;height:auto;display:block;touch-action:none;border:1px solid var(--dk);background:#fff;cursor:crosshair}
+.pat{width:52px;height:32px;border:1px solid var(--dk);border-radius:4px;padding:0}.pat.act{outline:2px solid var(--acc);outline-offset:2px}
+.cp-sec{border:2px groove var(--hi);padding:10px 12px;margin-bottom:10px;background:rgba(128,128,128,.06);border-radius:4px}
+.cp-sec b{display:block;margin-bottom:6px;color:var(--acc)}
+:root[data-theme="dark"] .cp-sec b{color:#8ab4f8}
+.cp-row{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;margin:6px 0}
+.cp-rng{flex:1;accent-color:var(--acc);cursor:pointer}
+.js{white-space:pre-wrap;font:12px/1.35 'Courier New',monospace;margin:10px 0 0}
+.cdc{position:fixed;bottom:calc(42px + env(safe-area-inset-bottom,0px));left:-70px;width:60px;z-index:999;cursor:pointer}
+.cdc svg{display:block}
+.cdc.wk .l1{animation:lg .3s steps(1) infinite}.cdc.wk .l2{animation:lg .3s steps(1) infinite .15s}
+@keyframes lg{50%{transform:translateY(-2px)}}
+.mf{display:none;position:absolute;bottom:100%;left:30px;background:#ffffcc;color:#000;border:1px solid #000;padding:1px 6px;border-radius:4px;white-space:nowrap}
+.cdc.say .mf{display:block}
+.lw{width:min(490px,100%);background:var(--win);border:2px solid var(--dk);box-shadow:inset 2px 2px 0 var(--hi),0 12px 32px rgba(0,0,0,.55);margin:auto;padding:0 5px 5px}
+.lb{padding:16px 18px;background:var(--bd);border:1px solid var(--dk)}
+.lh{display:flex;gap:14px;align-items:center;margin-bottom:14px}
+.lh svg{width:54px;height:54px;flex:none}
+.lh h1{font-size:20px;margin:0;color:var(--acc)}
+.lu{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:6px;margin-bottom:14px}
+@media (max-width:480px){.lu{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.ut{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;padding:6px 2px;border:1px solid transparent;border-radius:4px;font-size:12px;font-weight:600;text-align:center}
+.ut span{max-width:100%;overflow-wrap:anywhere}
+.ut svg{width:34px;height:34px}
+.ut:hover{border-color:var(--sh);background:rgba(128,128,128,.1)}
+.ut.sel{background:var(--acc);color:#fff;border-color:var(--dk)}
+#lp{width:100%;height:30px;font:inherit;border:1px solid var(--dk);background:var(--bd);color:var(--fg);padding:0 8px;box-shadow:inset 1px 1px 2px rgba(0,0,0,.25)}
+.lhint{font-size:12px;color:var(--sub);margin:4px 0 0}
+.lbar{height:12px;border:1px solid var(--dk);background:#ccc;margin-top:12px;box-shadow:inset 1px 1px 2px #666}
+.lbar i{display:block;height:100%;width:0;background:repeating-linear-gradient(-45deg,#333399 0 6px,#6c8cff 6px 12px);transition:width .7s ease}
+.lmsg{min-height:2.4em;margin:8px 0;font-size:13px;font-weight:600}
+.lbt{display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.mq{position:fixed;border:1px solid #fff;background:rgba(51,51,153,.28);pointer-events:none;z-index:800}
+.stk{width:100%;min-height:140px;font:inherit;background:#fff899;color:#111;border:1px solid #b5a642;padding:8px;resize:vertical}
+.kb{position:relative;display:flex;height:120px;border:1px solid var(--dk);user-select:none;margin:8px 0;background:#fff}
+.kw{flex:1;border-right:1px solid #888;background:linear-gradient(180deg,#fff,#eee);color:#111;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;padding-bottom:6px;font-size:12px;position:relative}
+.kw:last-of-type{border-right:0}
+.kw.act,.kw:active{background:var(--acc);color:#fff}
+.kbk{position:absolute;top:0;width:9%;height:62%;background:linear-gradient(180deg,#333,#000);color:#fff;border:1px solid #000;z-index:2;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;font-size:10px}
+.kbk.act,.kbk:active{background:var(--acc)}
+.mg{display:grid;grid-template-columns:repeat(8,30px);gap:0;border:2px solid var(--dk);margin:8px auto;width:max-content;user-select:none}
+.mc{width:30px;height:30px;border:1px solid #666;display:grid;place-items:center;font-weight:700;font-size:14px;padding:0;background:linear-gradient(135deg,#eee,#bbb);color:#111;box-shadow:inset 1px 1px 0 #fff}
+.mc.rv{background:#dcdcdc;box-shadow:none}
+.mc.bm{background:#d93025;color:#fff}
+.mc.hi{outline:2px solid var(--acc);outline-offset:-2px}
+.sl{border:1px solid var(--dk);margin-bottom:10px;background:var(--win)}
+.sl-top{height:16px;background:repeating-linear-gradient(135deg,#222 0 8px,#f5c518 8px 16px);border-bottom:1px solid var(--dk);transform-origin:left bottom;transition:transform .12s ease}
+.sl.clap .sl-top{transform:rotate(-12deg)}
+.sl-meta{display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--dk);font-size:12px;text-align:center}
+.sl-meta span{padding:2px 4px;border-right:1px solid var(--dk)}.sl-meta span:last-child{border-right:0}
+.vf{border:1px solid var(--dk);height:160px;display:grid;place-items:center;background:#101824;color:#6cf;position:relative;overflow:hidden}
+.vf svg{width:100%;height:100%}
+body.cinema #mb,body.cinema #lbar{transform:translateY(-120%)}
+.lbox{position:fixed;left:0;right:0;height:0;background:#000;z-index:1500;pointer-events:none;transition:height .25s ease}
+#lb-t{top:0}#lb-b{bottom:0}
+body.cinema #lb-t,body.cinema #lb-b{height:44px}
+.wb-bar{border:1px solid var(--dk);padding:6px 8px;margin-bottom:10px;background:linear-gradient(180deg,#eef2ff,#d0d8f0);color:#111;border-radius:4px}
+.wb-in{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px}
+.wb-tl{display:flex;gap:2px;align-items:flex-end;height:16px}
+.wb-tl i{width:4px;background:#333399;display:inline-block}
+.wb-frame{border:1px solid var(--dk);padding:12px;background:#fff;color:#111;font-size:13px;line-height:1.45;box-shadow:inset 1px 1px 3px rgba(0,0,0,.15)}
+.wb-if{width:100%;height:250px;border:1px solid var(--dk);background:#fff}
+.px-p{position:fixed;width:4px;height:4px;background:var(--acc);pointer-events:none;z-index:3000}
+/* Mac OS 9 Bottom Tabbed Launcher & Sherlock & RexIDE */
+#lbar{position:fixed;bottom:0;left:12px;z-index:950;display:flex;gap:3px;align-items:flex-end;padding-bottom:env(safe-area-inset-bottom,0px)}
+.ltab{background:linear-gradient(180deg,var(--hi),var(--win));border:1px solid var(--dk);border-bottom:0;border-radius:6px 6px 0 0;padding:4px 10px;display:flex;align-items:center;gap:5px;font-size:12px;font-weight:700;box-shadow:inset 1px 1px 0 var(--hi),0 -2px 4px rgba(0,0,0,.25);transition:padding .12s ease}
+.ltab:hover{padding-bottom:8px;background:linear-gradient(180deg,#fff,#dce4ff)}
+.ltab svg{width:18px;height:18px}
+.sh-ch{display:flex;gap:4px;margin-bottom:8px;flex-wrap:wrap}
+.sh-res{border:1px solid var(--dk);background:var(--bd);max-height:210px;overflow:auto;margin-top:8px}
+.sh-r{display:grid;grid-template-columns:1.8fr 1fr 70px;gap:6px;padding:5px 8px;border-bottom:1px solid rgba(128,128,128,.25);width:100%;text-align:left;font-size:12px;align-items:center}
+.sh-r:hover{background:var(--acc);color:#fff}
+.rex-ed{width:100%;height:115px;font:12px/1.4 'Courier New',monospace;background:#141824;color:#7ee787;border:1px solid var(--dk);padding:8px;resize:vertical}
+.rex-out{background:#0d1017;color:#c9d1d9;font:12px/1.4 'Courier New',monospace;padding:8px;border:1px solid var(--dk);margin-top:6px;min-height:95px;white-space:pre-wrap}
+</style>
+<script type="application/json" id="me">{"name":"Aditya P Dixit","preferred_name":"Adi","headline":"AI/ML engineering student and open source systems builder","location":"Bengaluru, India",
+"contact":{"email":"adityapdixit6626@gmail.com","github":"https://github.com/Hootsworth","medium":"https://medium.com/@adityapdixit6626","portfolio":"https://adityapdixit.me/portfolio"},
+"summary":"AI/ML student building computer vision, deep learning, agent infrastructure and systems tooling. Interested in large-scale ML, NLP, reinforcement learning and AI systems.",
+"education":[{"institution":"RV University, Bengaluru","degree":"B.Tech (Hons.) Artificial Intelligence and Machine Learning","minor":"Film Direction","start":"2024-08","end":null,"cgpa":9.04}]}
+</script>
+</head>
+<body>
+<div id="desk"></div>
+<div id="lb-t" class="lbox"></div><div id="lb-b" class="lbox"></div>
+<nav id="mb" aria-label="Menu bar">
+<button data-m="apple" aria-label="Apple menu"><svg viewBox="0 0 14 16"><path d="M7 3c1-2 3-2 3-2 0 2-1 3-3 3z" fill="#61bb46"/><path d="M7 5C5 4 1 5 1 7h12c0-2-2-3-6-2z" fill="#61bb46"/><path d="M1 7c0 1.5.4 3 1 4.2h10c.6-1.2 1-2.7 1-4.2z" fill="#fdb827"/><path d="M2 10.5c.6 1.5 1.4 3 2.5 4h5c1.1-1 1.9-2.5 2.5-4z" fill="#e03a3e"/><path d="M4.2 14c.8 1.2 1.5 2 2.3 2 .5 0 .5-.5 1-.5s.5.5 1 .5c.8 0 1.5-.8 2.3-2z" fill="#009ddc"/></svg></button>
+<div id="am"></div>
+<button id="sp" aria-label="Toggle sound"><svg viewBox="0 0 14 14" stroke="currentColor" stroke-width="1.6" fill="none"><path d="M2 5h3l3-3v10L5 9H2z" fill="currentColor"/><path class="w" d="M10 4.5q2 2.5 0 5M11.8 2.8q3 4.2 0 8.4"/><path class="x" d="M9.5 5l4 4M13.5 5l-4 4" style="display:none"/></svg></button><button id="clk" aria-label="Date"></button><button id="app-sw" data-m="apps" aria-label="Active Application"></button>
+</nav>
+<div id="lbar" aria-label="Mac OS 9 Application Launcher"></div>
+<div id="boot"><div class="boot-card"><svg viewBox="0 0 64 64" fill="none"><rect x="4" y="4" width="56" height="56" rx="8" fill="#e8edff" stroke="#111" stroke-width="2"/><path d="M32 10c-6 8-6 24 0 30h-7v8" stroke="#333399" stroke-width="3"/><circle cx="21" cy="24" r="2.5" fill="#111"/><circle cx="43" cy="24" r="2.5" fill="#111"/><path d="M20 42q12 10 24 0" stroke="#333399" stroke-width="3" fill="none"/></svg><h2 style="margin:8px 0 2px;color:#333399">Mac OS 9.2 Platinum</h2><p style="margin:0;font-size:13px;color:#444">Featuring Sherlock 2 &amp; RexScript Studio</p><div id="bar"><i></i></div><p id="cap" style="font-size:12px;margin:8px 0 0;min-height:1.4em;color:#333"></p></div><div id="ext"></div></div>
+<script>
+const LINKS={email:'mailto:adityapdixit6626@gmail.com',github:'https://github.com/Hootsworth',medium:'https://medium.com/@adityapdixit6626'};
+const $=(s,r=document)=>r.querySelector(s);
+const S=(p)=>`<svg viewBox="0 0 32 32" fill="none" stroke="#111" stroke-width="1.6">${p}</svg>`;
+const IC={
+disk:S('<rect x="3" y="6" width="26" height="20" rx="2" fill="#d8dde6"/><path d="M3 20h26" stroke="#888"/><circle cx="24" cy="23" r="1.5" fill="#2ecc71"/>'),
+folder:S('<path d="M3 8h9l3 3h14v16H3z" fill="#7aa7ff"/><path d="M3 13h26v14H3z" fill="#9ec2ff"/>'),
+doc:S('<path d="M7 3h13l6 6v20H7z" fill="#fff"/><path d="M20 3v6h6" fill="#d0d7de"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#333399"/>'),
+trash:S('<path d="M8 8l2 21h12l2-21z" fill="#c8d0db"/><path d="M6 8h20M12 8V4h8v4M13 13v11M19 13v11"/>'),
+face:S('<rect x="5" y="3" width="22" height="26" rx="3" fill="#e4ecff"/><path d="M11 11v3M21 11v3M11 19l2 2h6l2-2" stroke="#333399" stroke-width="2"/>'),
+globe:S('<circle cx="16" cy="16" r="12" fill="#38a1db"/><ellipse cx="16" cy="16" rx="5" ry="12" fill="#5bc0be"/><path d="M4 16h24M6 10h20M6 22h20"/>'),
+term:S('<rect x="3" y="5" width="26" height="22" rx="2" fill="#1e2430"/><path d="M8 12l4 3-4 3M15 20h8" stroke="#4af626" stroke-width="2"/>'),
+game:S('<rect x="3" y="9" width="26" height="14" rx="5" fill="#9b59b6"/><path d="M9 13v6M6 16h6" stroke="#fff" stroke-width="2"/><circle cx="21" cy="15" r="1.8" fill="#f1c40f"/><circle cx="25" cy="17" r="1.8" fill="#e74c3c"/>'),
+bomb:S('<circle cx="14" cy="19" r="9" fill="#e74c3c"/><path d="M20 11l4-4M24 3v4M22 5h4" stroke="#f39c12" stroke-width="2"/>'),
+paint:S('<rect x="4" y="5" width="24" height="22" rx="2" fill="#fff"/><path d="M6 26l6-2 14-14-4-4L8 20z" fill="#ff6b6b"/><circle cx="11" cy="11" r="2.5" fill="#f1c40f"/>'),
+ctl:S('<rect x="3" y="4" width="26" height="24" rx="2" fill="#dcdcdc"/><path d="M6 10h20M6 16h20M6 22h20"/><rect x="9" y="7" width="5" height="6" fill="#333399"/><rect x="19" y="13" width="5" height="6" fill="#e67e22"/><rect x="12" y="19" width="5" height="6" fill="#27ae60"/>'),
+note:S('<path d="M5 4h22v17l-6 7H5z" fill="#fff780"/><path d="M21 21h6M21 21v7M9 10h14M9 15h10"/>'),
+synth:S('<rect x="3" y="7" width="26" height="18" fill="#fff"/><path d="M9 7v18M16 7v18M23 7v18"/><rect x="7" y="7" width="4" height="10" fill="#333399"/><rect x="14" y="7" width="4" height="10" fill="#333399"/><rect x="21" y="7" width="4" height="10" fill="#333399"/>'),
+slate:S('<rect x="4" y="11" width="24" height="17" fill="#2c3e50"/><path d="M4 7h24v4H4z" fill="#f1c40f"/><path d="M9 17h14M9 22h9" stroke="#fff"/>'),
+sherlock:S('<path d="M8 14c0-5 4-9 8-9s8 4 8 9H5c0-2 2-3 3-3z" fill="#8d5524"/><circle cx="19" cy="19" r="6" fill="#7fd8ff" stroke="#111" stroke-width="2"/><path d="M23 23l5 5" stroke="#111" stroke-width="3"/>'),
+rex:S('<rect x="4" y="4" width="24" height="24" rx="3" fill="#1f2937"/><path d="M9 11l4 4-4 4M15 21h8" stroke="#38bdf8" stroke-width="2"/>'),
+up:S('<rect x="4" y="4" width="24" height="24" rx="4" fill="#4f46e5"/><path d="M16 22V10M11 15l5-5 5 5M9 24h14" stroke="#fff" stroke-width="2"/>')};
+const ico=(k,l,o)=>`<button class="ic" data-open="${o}">${IC[k]}<span>${l}</span></button>`;
+const doc=(t,sub,body,tags)=>`<h1>${t}</h1><p><i>${sub}</i></p>${body}<p>${(tags||[]).map(x=>`<span class="tag">${x}</span>`).join('')}</p>`;
+const W={
+about:{t:'Read Me (OS 9.2)',w:460,h:390,x:55,y:46,b:()=>`<h1><span id="tw"></span><span class="cur"></span></h1>
+<p>Welcome to <b>Mac OS 9.2 Platinum (2001 Edition)</b>! You\u2019ve upgraded from 1996 System 7 into 256-color Platinum bevels, full-color icons, and early-2000s tools.</p>
+<p>I\u2019m <b>Aditya P Dixit (Adi)</b> \u2014 third-year B.Tech (Hons.) AI &amp; ML student at RV University, Bengaluru, with a minor in Film Direction (CGPA 9.04).</p>
+<h2>New in Mac OS 9.2</h2>
+<p>\u2022 <b>Sherlock 2</b>: Instant universal search across all projects, research &amp; roles.<br>\u2022 <b>RexScript Studio</b>: Interactive agent compiler &amp; SHA-256 plan tracer.<br>\u2022 <b>2001 Wayback Machine</b>: Search <code>google.com</code> or <code>wikipedia.org</code> \u2014 they exist now in 2001!</p>
+<a class="btn df" data-open="sherlock">Open Sherlock 2</a><a class="btn" data-open="rexide">RexScript Studio</a><a class="btn" data-open="update">OS Switcher\u2026</a>`},
+roles:{t:'Roles & Clubs',w:440,h:360,x:140,y:80,b:()=>`<h1>Get Info</h1>
+<div class="row"><i>President</i>Poéthra, RVU's literary and writers' club</div>
+<div class="row"><i>Placements</i>Student Placement Coordinator, RVU</div>
+<div class="row"><i>Open source</i>Head, FOSS United RVU</div>
+<div class="row"><i>Product</i>Director, AWS Student Builder Club RVU</div>
+<div class="row"><i>WebOps</i>Head, Iterium</div>
+<div class="row"><i>Founder</i>Singulr.tech</div>`},
+contact:{t:'Contact',w:360,h:240,x:170,y:110,b:()=>`<h1>Say hello</h1><p>DSL / Cable Modem ready.</p>
+<a class="btn df" href="${LINKS.email}">Email</a><a class="btn" href="${LINKS.github}" target="_blank" rel="noopener">GitHub</a><a class="btn" href="${LINKS.medium}" target="_blank" rel="noopener">Medium</a>`}};
+const P=[
+['slotly','Slotly','Timetable automation',`Built on Google OR-Tools (CP-SAT). Generates a clash-free timetable in under 15 seconds, and was used by the University Timetable Coordinators to schedule BTech (H) classes for all four years in AY 2026-27. Swift frontend for iOS and macOS.`,['OR-Tools','Node.js','Python','Swift']],
+['rex','RexScript','Language and runtime for autonomous agents',`An experimental scripting language for agent workflows with custom execution semantics. Compiler-backed diagnostics, execution tracing, a multi-mode runtime, and VS Code tooling.<br><br><a class="btn df" data-open="rexide">Launch RexScript Live Studio \u2192</a>`,['Compilers','Runtime','VS Code']],
+['cortex','Cortex Kit','Cognitive infrastructure for AI agents',`An 8-package Node.js toolkit for agent memory, planning and execution. Includes Phantom Run, a deterministic simulation engine that hashes plans with SHA-256. 43 automated tests, 0 failures, CI across 6 environments.`,['Node.js','Open source']],
+['xrisk','XRisk Engine','Safety and control layer for LLM agents',`Policy enforcement with three outcomes: allow, confirm, block. A 6-signal weighted risk score from 0 to 1, prompt-injection defense with 6 detection patterns, and protection for 5 sensitive data classes. 100% pass across 20+ scenario tests.`,['AI safety','Open source']],
+['fish','Shiny Fishstick','Website interaction compiler',`An OpenAPI for websites: it turns raw pages into semantic actions, shrinking what an agent must choose from, from 100+ DOM targets to 5-15 intents. Powers a Chrome web agent with planning, page memory and loop recovery.`,['Agents','Chrome']],
+['dql','DQL Agent','Deep reinforcement learning',`PyTorch Deep Q-learning agents that play Pac-Man, Minesweeper and Snake, with custom rewards and experience replay. Completed all 20 Pac-Man evaluation episodes, average reward 58.62.`,['PyTorch','RL']],
+['firefly','Firefly','Systems diagnostics platform',`Models expected against observed performance across storage, PCIe, memory and network paths. Deterministic bottleneck analysis, hardware probing and benchmarks, packaged cross-platform with Tauri.`,['Tauri','Node.js']],
+['intents','Intents','Cognitive continuity extension',`A local-first browser extension that helps you recover what you were thinking after a distraction. Hold That Thought, a Context Ladder, a reading mode. No accounts, no tracking.`,['Browser','Privacy']],
+['intro','INTROSPECTIVE','Script2Vision',`An AI-assisted cinematic pre-production suite, where the ML degree meets the Film Direction minor.`,['AI','Film']],
+['chatsie','Chatsie','Web conferencing',`A web conferencing application.`,['Web']],
+['singulr','Singulr.tech','Founder',`The company I founded, and the umbrella for the things I ship.`,['Founder']]];
+P.forEach((p,i)=>W['p-'+p[0]]={t:p[1],w:420,h:310,x:100+(i%4)*30,y:80+(i%4)*24,b:()=>doc(p[1],p[2],'<p>'+p[3]+'</p>',p[4])});
+const esc=s=>s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const FACTS=[[/git|code|repo|dev|stack|program/,'Hootsworth on GitHub','RexScript, Cortex Kit, XRisk Engine and more.','projects'],
+[/film|movie|video|cinema|netflix|youtube|director/,'A minor in Film Direction','Also the reason INTROSPECTIVE and Director\u2019s Cut exist.','cinema'],
+[/job|hire|work|career|linkedin|indeed|resume|cv/,'Adi is available for interesting problems','Product intern, research assistant, coordinator.','resume'],
+[/\bai\b|gpt|claude|llm|agent|bot/,'Agents, but safer','Cortex Kit and XRisk Engine.','p-xrisk'],
+[/game|play|pac|snake|mine|fun/,'A DQL agent plays Pac-Man & Minesweeper','20 of 20 episodes completed. Play Minesweeper or Snake yourself.','mines'],
+[/time|class|college|school|rvu|exam/,'A timetable in under 15 seconds','Used for AY 2026-27 at RVU.','p-slotly'],
+[/drone|army|radar|signal|defen/,'Drone detection with the Indian Army','RF/DSP and ML research.','research']];
+const WB01=[
+[/google/,{u:'www.google.com',d:'Oct 24, 2001',t:'Google Search (2001)',h:`<center><h1 style="font-family:serif;font-size:32px;margin:4px 0"><span style="color:#1a54e8">G</span><span style="color:#d93025">o</span><span style="color:#f5b400">o</span><span style="color:#1a54e8">g</span><span style="color:#0f9d58">l</span><span style="color:#d93025">e</span></h1><p style="font-size:12px"><i>Searching 1,610,476,000 web pages (2001 Index)</i></p></center><hr><p><b>Top 2001 Search Results for \u201CAditya P Dixit\u201D:</b></p><ul><li><a href="#" data-open="rexide"><b>RexScript Autonomous Agent Runtime</b></a> \u2014 Compiler-backed .rex workflows</li><li><a href="#" data-open="p-slotly"><b>Slotly CP-SAT Solver</b></a> \u2014 4 years of RVU B.Tech timetables in &lt;15s</li><li><a href="#" data-open="research"><b>Indian Army RF/DSP Drone Detection</b></a> \u2014 NumPy &amp; TensorFlow evaluation</li></ul>`}],
+[/wiki|wikipedia/,{u:'www.wikipedia.org',d:'Oct 18, 2001',t:'Wikipedia: The Free Encyclopedia (2001)',h:`<h2>Wikipedia (Launched Jan 15, 2001)</h2><p><i>Welcome to Wikipedia, the new Nupedia wiki project with 13,000 articles!</i></p><hr><p><b>Featured Entry: Aditya P Dixit (Adi)</b> — AI/ML researcher (CGPA 9.04) and Film Direction minor at RV University, author of <a href="#" data-open="p-cortex">Cortex Kit</a>, <a href="#" data-open="p-xrisk">XRisk Engine</a>, and <a href="#" data-open="cinema">INTROSPECTIVE</a>.</p>`}],
+[/apple|mac|osx|platinum/,{u:'www.apple.com',d:'Oct 23, 2001',t:'Apple Computer (Oct 2001)',h:`<center><h2>Apple Introduces iPod &amp; Mac OS 9.2</h2><p><i>1,000 songs in your pocket.</i></p></center><hr><p>\u2022 <b>Developer News:</b> Adi\u2019s portfolio is running natively on Mac OS 9.2 Platinum. Ready for 2026? Open <a href="#" data-open="update">Software Update</a> to jump to macOS Sequoia!</p>`}],
+[/slashdot|news|nerd/,{u:'slashdot.org',d:'Nov 02, 2001',t:'Slashdot: News for Nerds (2001)',h:`<h3 style="background:#006666;color:#fff;padding:4px 8px;margin:0">Slashdot: News for Nerds. Stuff that Matters.</h3><p><b>Posted by CmdrTaco on Nov 02, 2001:</b> RV University student ships <a href="#" data-open="p-cortex">Cortex Kit</a> with SHA-256 deterministic Phantom Run simulation and wins 1st place at Kalpavikas 1.0 (95+ teams).</p>`}]];
+function initBrowser(el){const ad=$('.ad',el),pg=$('.pg',el),sb=$('.sb',el),H=[];let i=-1;
+const tl=[6,10,8,14,16,12,15,9,13,16,11,15].map(h=>`<i style="height:${h}px"></i>`).join('');
+const wbBar=(u,st)=>`<div class="wb-bar"><div class="wb-in"><div><b>WAYBACK MACHINE \u00B7 2001 ARCHIVE</b><br><span>${st}</span></div><div class="wb-tl" title="1996\u20132001 Captures">${tl}</div></div></div>`;
+function renderAdiFallback(u,q,reason){let f=FACTS.filter(x=>x[0].test(q));if(!f.length)f=FACTS.slice(0,4);
+ pg.innerHTML=wbBar(u,`0 captures in 2001 (${reason})`)
+ +`<h1>404: Not Yet Invented in 2001</h1><p>\u201C<b>${esc(u)}</b>\u201D did not exist in the Mac OS 9 era (${reason}). Routing to Adi\u2019s archive instead (or <a href="#" data-open="update">upgrade to macOS Sequoia</a> for the modern web!):</p>`
+ +f.map(x=>`<p><a href="#" data-open="${x[3]}">${x[1]}</a><br>${x[2]}</p>`).join('')}
+async function page(u){const q=u.toLowerCase().replace(/^https?:\/\/|^www\./g,''),home=!q||/^adityapdixit\.me\/?$/.test(q);
+ if(home){ad.value='adityapdixit.me';
+  pg.innerHTML=wbBar('adityapdixit.me','Mac OS 9.2 Node \u00B7 Year 2001')+`<h1>Adi\u2019s 2001 Portal</h1><p><span class="cur"></span> Notice how upgrading from System 7 (1996) to Mac OS 9.2 (2001) advanced the Wayback Machine! Sites like <a href="#" data-b="q:google.com">google.com (1998)</a> and <a href="#" data-b="q:wikipedia.org">wikipedia.org (2001)</a> now work, while post-2001 sites like <a href="#" data-b="q:github.com">github.com (2008)</a> still route to Adi!</p>`
+  +FACTS.slice(0,4).map(x=>`<p><a href="#" data-open="${x[3]}">${x[1]}</a><br>${x[2]}</p>`).join('');return}
+ ad.value='web.archive.org/web/20011024/'+q;
+ const m01=WB01.find(x=>x[0].test(q));
+ if(m01){const d=m01[1];pg.innerHTML=wbBar(d.u,`Saved 42 times through ${d.d}`)+`<div class="wb-frame">${d.h}<hr><small><i>Archived ${d.d} \u00B7 Mac OS 9.2 / Open Transport 2.7</i></small></div>`;return}
+ if(/\.[a-z]{2,}$/.test(q.split('/')[0])){
+  try{const r=await fetch(`https://archive.org/wayback/available?url=${encodeURIComponent(q)}&timestamp=20011024`);
+   const j=await r.json(),s=j&&j.archived_snapshots&&j.archived_snapshots.closest;
+   if(s&&s.available&&+s.timestamp.slice(0,4)<=2002){const iu=s.url.replace(/\/web\/(\d+)\//,'/web/$1if_/');
+    pg.innerHTML=wbBar(q,`Snapshot from ${s.timestamp.slice(0,4)}-${s.timestamp.slice(4,6)}-${s.timestamp.slice(6,8)}`)+`<iframe class="wb-if" src="${esc(iu)}" title="Wayback 2001"></iframe>`;return}
+  }catch(e){}}
+ const yr=/github/.test(q)?'founded Feb 2008':/youtube/.test(q)?'founded Feb 2005':/openai|chatgpt/.test(q)?'founded Dec 2015':'post-2001 domain';
+ renderAdiFallback(u,q,yr)}
+function go(u,push=1){u=(u||'').trim()||'adityapdixit.me';if(push){H.splice(i+1);H.push(u);i=H.length-1}
+ el.classList.add('ld');sb.textContent='Open Transport: Requesting 2001 snapshot\u2026';clearTimeout(go.t);
+ go.t=setTimeout(async()=>{if(!el.isConnected)return;await page(u);el.classList.remove('ld');sb.textContent='Document: Done'},360)}
+el._go=go;el._back=()=>{if(i>0)go(H[--i],0)};el._fwd=()=>{if(i<H.length-1)go(H[++i],0)};
+el.addEventListener('click',e=>{const b=e.target.closest('[data-b]');if(!b)return;e.preventDefault();const k=b.dataset.b;
+ if(k==='back')el._back();else if(k==='fwd')el._fwd();else if(k==='home')go('adityapdixit.me');else if(k==='go')go(ad.value);
+ else if(k.startsWith('q:'))go(k.slice(2))});
+ad.addEventListener('keydown',e=>{if(e.key==='Enter')go(ad.value)});go('adityapdixit.me')}
+/* NEW IN MAC OS 9.2: Sherlock 2 Universal Search & RexScript Live Compiler Studio */
+function initSherlock(el){const inp=$('.sh-in',el),res=$('.sh-res',el),st=$('.sh-st',el);let ch='all';
+ const DB=[
+  ['Slotly CP-SAT Solver','Project \u00B7 OR-Tools, Swift, Python','99%','p-slotly','all proj'],
+  ['RexScript Agent Language','Project \u00B7 Compilers, Runtime','98%','rexide','all proj'],
+  ['Cortex Kit (Phantom Run)','Project \u00B7 Node.js, SHA-256','96%','p-cortex','all proj'],
+  ['XRisk Engine Firewall','Project \u00B7 AI Safety, Policy','95%','p-xrisk','all proj'],
+  ['Shiny Fishstick Web Compiler','Project \u00B7 Chrome, Agents','94%','p-fish','all proj'],
+  ['DQL Agent (Pac-Man & Minesweeper)','Project \u00B7 PyTorch, RL','93%','mines','all proj'],
+  ['Indian Army Drone Detection','Research \u00B7 RF/DSP, TensorFlow','97%','research','all exp'],
+  ['CARA RVU Summer Intern','Experience \u00B7 Federated ML, LAN LLMs','92%','resume','all exp'],
+  ['Sioman Technologies Intern','Experience \u00B7 PyTorch CNN Noise','91%','resume','all exp'],
+  ['Director\u2019s Cut (INTROSPECTIVE)','Film Minor \u00B7 Script2Vision','95%','cinema','all proj'],
+  ['President of Poéthra & FOSS Head','Roles \u00B7 RV University Clubs','89%','roles','all exp'],
+  ['Google & Wikipedia (2001 Web)','Wayback 2001 \u00B7 Navigator','88%','browser','all web']];
+ function search(){const q=inp.value.toLowerCase().trim();
+  const rows=DB.filter(r=>r[4].includes(ch)&&(!q||r[0].toLowerCase().includes(q)||r[1].toLowerCase().includes(q)));
+  res.innerHTML=rows.map(r=>`<button class="sh-r" data-open="${r[3]}"><b>${esc(r[0])}</b><span>${esc(r[1])}</span><span style="text-align:right;font-weight:700">${r[2]}</span></button>`).join('')||'<div style="padding:12px">No items matched. Try clearing the query.</div>';
+  st.textContent=`Sherlock 2 found ${rows.length} items across Adi HD.`}
+ inp.addEventListener('input',search);
+ el.addEventListener('click',e=>{const b=e.target.closest('[data-ch]');if(b){ch=b.dataset.ch;el.querySelectorAll('[data-ch]').forEach(x=>x.classList.toggle('act',x===b));search()}
+  const q=e.target.closest('[data-sq]');if(q){inp.value=q.dataset.sq;search()}});
+ search();setTimeout(()=>inp.focus(),200)}
+const REX_SAMPLES={
+agent:`agent ResearchCoordinator {\n  memory: cortex.sha256("rvu-lan-fedml")\n  policy: xrisk.guard(threshold: 0.18)\n  step scan_papers() -> compress_hierarchy(ratio: 4.2)\n  emit("Ready for conference submission")\n}`,
+drone:`agent TharDesertRadar {\n  input: rf_dsp.band("2.4GHz", snr_db: -4.5)\n  model: tf.load("quadcopter_cnn_v3.pb")\n  when confidence > 0.92 -> alert("UAV lock confirmed")\n}`,
+slotly:`workflow Timetable2026 {\n  solver: ortools.cp_sat(years: 4, branches: "BTech_AIML")\n  constraint: zero_clashes(rooms, faculty, labs)\n  solve(timeout_sec: 15)\n}`};
+function initRex(el){const ed=$('.rex-ed',el),out=$('.rex-out',el);ed.value=REX_SAMPLES.agent;
+ function run(){const src=ed.value.trim(),lines=src.split('\n').length;
+  let h=0x811c9dc5;for(let i=0;i<src.length;i++){h^=src.charCodeAt(i);h=Math.imul(h,0x01000193)}
+  const sha=(h>>>0).toString(16).padStart(8,'0')+'e4a9b10c7f32';
+  const ag=(src.match(/(?:agent|workflow)\s+(\w+)/)||[0,'AnonymousAgent'])[1];
+  sfx('blip');
+  out.textContent=`[RexScript v0.4.2 Carbon Compiler]\n\u2713 Lexical & AST check passed (${lines} lines, 0 errors)\n\u2713 Phantom Run SHA-256 Plan Hash: 0x${sha}\n\u2713 XRisk Policy Score: 0.08 (ALLOW)\n\u25B6 Executing ${ag}\u2026 Completed in 11.4 ms.`}
+ el._run=run;el.addEventListener('click',e=>{const b=e.target.closest('[data-rx]');if(!b)return;const k=b.dataset.rx;
+  if(k==='run')run();else if(REX_SAMPLES[k]){ed.value=REX_SAMPLES[k];run()}});run()}
+function initSnake(el){const c=$('canvas',el),x=c.getContext('2d'),N=15,C=16,info=$('.sc',el),D={U:[0,-1],D:[0,1],L:[-1,0],R:[1,0]};let s,d,nd,f,sc,hi=0,auto=0,over,t;
+const hit=(p,b)=>p[0]<0||p[1]<0||p[0]>=N||p[1]>=N||b.some(q=>q[0]==p[0]&&q[1]==p[1]);
+const ok=n=>n[0]+d[0]||n[1]+d[1];
+function food(){do f=[Math.random()*N|0,Math.random()*N|0];while(hit(f,s))}
+function reset(){s=[[7,7],[6,7],[5,7]];d=nd=[1,0];sc=0;over=0;food()}
+function draw(){x.fillStyle='#101824';x.fillRect(0,0,240,240);s.forEach((p,i)=>{x.fillStyle=i?'#38a1db':'#61bb46';x.fillRect(p[0]*C+1,p[1]*C+1,C-2,C-2)});x.fillStyle='#e74c3c';x.fillRect(f[0]*C+3,f[1]*C+3,C-6,C-6);
+ info.textContent=over?`Game over. Score ${sc}, best ${hi}.`:`Score ${sc}`+(auto?' (DQL Autopilot)':' (Arrows/WASD)')}
+function step(){if(!el.isConnected){clearInterval(t);document.removeEventListener('keydown',kd);return}if(over||!el.classList.contains('on'))return;
+ if(auto){let b=null,bs=1e9;for(const k in D){const n=D[k];if(!ok(n))continue;const p=[s[0][0]+n[0],s[0][1]+n[1]];if(hit(p,s.slice(0,-1)))continue;const m=Math.abs(p[0]-f[0])+Math.abs(p[1]-f[1]);if(m<bs){bs=m;b=n}}if(b)nd=b}
+ d=nd;const h=[s[0][0]+d[0],s[0][1]+d[1]];if(hit(h,s.slice(0,-1))){over=1;hi=Math.max(hi,sc);sfx('bomb');draw();return}
+ s.unshift(h);if(h[0]==f[0]&&h[1]==f[1]){sc++;sfx('blip');food()}else s.pop();draw()}
+const kd=e=>{if(!el.isConnected||!el.classList.contains('on')||e.target.tagName==='INPUT')return;const k={ArrowUp:'U',w:'U',ArrowDown:'D',s:'D',ArrowLeft:'L',a:'L',ArrowRight:'R',d:'R'}[e.key];if(k){e.preventDefault();if(ok(D[k]))nd=D[k]}};
+document.addEventListener('keydown',kd);
+el.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b)return;const k=b.dataset.k;if(k=='A')auto=!auto;else if(k=='X')reset();else if(ok(D[k]))nd=D[k];draw()});
+el._reset=()=>{reset();draw()};el._auto=()=>{auto=!auto;draw()};reset();draw();t=setInterval(step,110)}
+function initTerm(el){const o=$('.to',el),inp=$('.ti',el),bd=$('.bd',el);
+const out=t=>{o.insertAdjacentHTML('beforeend',t+'\n');bd.scrollTop=1e5};out('Mac OS 9.2 MPW Shell. Type help.');
+const C={help:()=>'help whoami ls open &lt;name&gt; sherlock rex sudo hire adi moof clear',
+whoami:()=>'Aditya P Dixit. AI/ML student, open source head, film director.',
+ls:()=>Object.keys(W).filter(k=>!k.startsWith('p-')).join('  '),
+sherlock:()=>{open('sherlock');return 'Launching Sherlock 2\u2026'},
+rex:()=>{open('rexide');return 'Launching RexScript Studio\u2026'},
+moof:()=>{clarus(1);return 'Moof!'},clear:()=>{o.textContent='';return 'cleared'}};
+function run(v){const m=v.match(/^open (\S+)$/);out('adi% '+esc(v));
+ if(C[v])out(C[v]());else if(m)W[m[1]]?open(m[1]):out('no such window: '+esc(m[1]));
+ else if(v==='sudo hire adi'){out('Access granted. Drafting offer letter\u2026');alertBox('Offer letter ready for signature.',[['Accept']])}
+ else if(v)out('command not found: '+esc(v)+' (try help)')}
+el._run=run;inp.addEventListener('keydown',e=>{if(e.key!=='Enter')return;const v=inp.value.trim();inp.value='';run(v)});
+bd.addEventListener('click',()=>inp.focus());setTimeout(()=>inp.focus(),250)}
+const NOTES=['MAC OS 9.2 UPGRADE NOTES:\n- Try Sherlock 2 to search all projects!\n- Open RexScript Studio to compile .rex workflows\n- Check google.com in Navigator (it exists in 2001!)\n- Open Software Update to jump to macOS Sequoia or downgrade to System 7'];
+function initStickies(el){const ta=$('.stk',el),st=$('.ni',el);let idx=0,notes=[...NOTES];
+ const render=()=>{ta.value=notes[idx];st.textContent=`Note ${idx+1} of ${notes.length}`};
+ ta.addEventListener('input',()=>notes[idx]=ta.value);
+ el.addEventListener('click',e=>{const b=e.target.closest('[data-n]');if(!b)return;const k=b.dataset.n;
+  if(k==='nx'){idx=(idx+1)%notes.length;render()}else if(k==='nw'){notes.push('New note\u2026');idx=notes.length-1;render();ta.focus()}});render()}
+function initSynth(el){let wave='sawtooth',tm;
+ const N=[['C',261.6,'a',0],['C#',277.2,'w',1,8.5],['D',293.7,'s',0],['D#',311.1,'e',1,21],['E',329.6,'d',0],['F',349.2,'f',0],['F#',370,'t',1,46],['G',392,'g',0],['G#',415.3,'y',1,58.5],['A',440,'h',0],['A#',466.2,'u',1,71],['B',493.9,'j',0],['C5',523.3,'k',0]];
+ const kb=$('.kb',el),st=$('.ks',el);
+ kb.innerHTML=N.map((n,i)=>n[3]?`<button class="kbk" data-i="${i}" style="left:${n[4]}%">${n[2].toUpperCase()}</button>`:`<button class="kw" data-i="${i}"><b>${n[0]}</b><span>${n[2].toUpperCase()}</span></button>`).join('');
+ function play(i,dur=.22){const n=N[i];if(!n)return;const w=snd;snd=true;beep(n[1],dur,wave,0);snd=w;
+  const b=kb.querySelector(`[data-i="${i}"]`);if(b){b.classList.add('act');setTimeout(()=>b.classList.remove('act'),160)}
+  st.textContent=`QuickTime Synth: ${n[0]} (${n[1]} Hz, ${wave})`}
+ kb.addEventListener('pointerdown',e=>{const b=e.target.closest('[data-i]');if(b)play(+b.dataset.i)});
+ const seq=arr=>{clearInterval(tm);let j=0;tm=setInterval(()=>{if(!el.isConnected||j>=arr.length){clearInterval(tm);return}if(arr[j]>=0)play(arr[j],.18);j++},165)};
+ el.addEventListener('click',e=>{const b=e.target.closest('[data-s]');if(!b)return;const s=b.dataset.s;
+  if(s==='sq'||s==='sw'||s==='tr')wave={sq:'square',sw:'sawtooth',tr:'triangle'}[s];
+  else if(s==='m1')seq([0,4,7,12,-1,7,12]);else if(s==='m2')seq([9,7,4,0,2,4,9,-1,7,9,12]);else if(s==='m3')seq([4,7,11,12,11,7,4,0])})}
+function initMines(el){const W=8,H=8,M=10,g=$('.mg',el),st=$('.ms',el);let bd,rv,fl,over,first,flagMode=0;
+ const nb=i=>{const x=i%W,y=i/W|0,r=[];for(let dy=-1;dy<=1;dy++)for(let dx=-1;dx<=1;dx++)if((dx||dy)&&x+dx>=0&&x+dx<W&&y+dy>=0&&y+dy<H)r.push((y+dy)*W+x+dx);return r};
+ function reset(){bd=Array(64).fill(0);rv=Array(64).fill(0);fl=Array(64).fill(0);over=0;first=1;draw();st.textContent='10 mines. DQL Agent ready.'}
+ function place(ex){let m=0;while(m<M){const i=Math.random()*64|0;if(i!==ex&&bd[i]!==9){bd[i]=9;m++}}for(let i=0;i<64;i++)if(bd[i]!==9)bd[i]=nb(i).filter(n=>bd[n]===9).length}
+ function flood(i){if(rv[i]||fl[i])return;rv[i]=1;if(!bd[i])nb(i).forEach(flood)}
+ function step(i,f){if(over)return;if(f||flagMode){if(!rv[i]){fl[i]=!fl[i];sfx('click');draw()}return}
+  if(fl[i]||rv[i])return;if(first){first=0;place(i)}
+  if(bd[i]===9){rv[i]=1;over=1;for(let k=0;k<64;k++)if(bd[k]===9)rv[k]=1;sfx('bomb');draw();st.textContent='BOOM! Stepped on a mine.';return}
+  flood(i);sfx('blip');if(rv.filter(Boolean).length===64-M){over=1;sfx('chime');st.textContent='Cleared! Episode reward: +58.62'}else st.textContent=`Flags: ${fl.filter(Boolean).length}/${M}`;draw()}
+ function dql(){if(over)return;if(first){step(27);st.textContent='DQL Agent: Opened center tile (Q=0.94).';return}
+  const u=[];for(let i=0;i<64;i++)if(!rv[i]&&!fl[i])u.push(i);if(!u.length)return;
+  const safe=u.filter(i=>bd[i]!==9),pick=(safe.length?safe:u)[Math.random()*(safe.length||u.length)|0];step(pick);st.textContent='DQL Policy: Picked max-Q safe tile.'}
+ function draw(){g.innerHTML=bd.map((v,i)=>`<button class="mc${rv[i]?' rv':''}${rv[i]&&v===9?' bm':''}" data-i="${i}">${fl[i]&&!rv[i]?'\u2691':!rv[i]?'':v===9?'*':v||''}</button>`).join('')}
+ g.addEventListener('click',e=>{const b=e.target.closest('.mc');if(b)step(+b.dataset.i,0)});
+ el.addEventListener('click',e=>{const b=e.target.closest('[data-m]');if(!b)return;const k=b.dataset.m;if(k==='r')reset();else if(k==='q')dql();else if(k==='f')flagMode=!flagMode});reset()}
+const SCENES=[
+{sc:'1A',tk:4,ln:'35mm f/1.4',t:'INT. LAB — 03:14 AM',d:'CRT glow reflects off cold filter coffee. The terminal prints: [PHANTOM RUN: SHA-256 MATCH].',svg:'<rect x="70" y="25" width="120" height="85"/><rect x="82" y="35" width="96" height="54"/><path d="M92 50h36M92 62h54M92 74h24M50 125h160"/>'},
+{sc:'2B',tk:1,ln:'50mm Anamorphic',t:'EXT. THAR DESERT — DUSK',d:'RF spectrum analyzer spikes at 2.4 GHz. A quadcopter silhouette emerges.',svg:'<path d="M0 110q60-25 130 0t130-10"/><path d="M105 45h50M120 45l-8 10h36l-8-10"/><circle cx="130" cy="50" r="3" fill="currentColor"/>'},
+{sc:'3C',tk:9,ln:'24mm Wide',t:'INT. RVU AUDITORIUM — DAY',d:'Slotly CP-SAT runs. In 14.2 seconds: zero clashes across all 4 years.',svg:'<rect x="40" y="20" width="180" height="100"/><path d="M40 45h180M40 70h180M95 20v100M155 20v100"/>'}];
+function toggleCinema(){document.body.classList.toggle('cinema');sfx('clap')}
+function initCinema(el){let i=0;const sl=$('.sl',el),mt=$('.sl-meta',el),vf=$('.vf',el),st=$('.stx',el);
+ function render(){const s=SCENES[i];mt.innerHTML=`<span><b>SCENE</b> ${s.sc}</span><span><b>TAKE</b> ${s.tk}</span><span><b>LENS</b> ${s.ln}</span>`;
+  vf.innerHTML=`<svg viewBox="0 0 260 140" fill="none" stroke="currentColor" stroke-width="2">${s.svg}</svg>`;
+  st.innerHTML=`<b>${s.t}</b><p style="margin:4px 0 0">${s.d}</p>`}
+ function clap(){sl.classList.add('clap');sfx('clap');setTimeout(()=>{sl.classList.remove('clap');SCENES[i].tk++;render()},160)}
+ sl.onclick=clap;el.addEventListener('click',e=>{const b=e.target.closest('[data-c]');if(!b)return;const k=b.dataset.c;if(k==='p'){i=(i+SCENES.length-1)%SCENES.length;clap()}else if(k==='n'){i=(i+1)%SCENES.length;clap()}else if(k==='cl')clap();else if(k==='cm')toggleCinema()});render()}
+function initUpdate(el){const st=$('.up-st',el),bar=$('.up-bar',el);let busy=0;
+ const go=url=>{if(busy)return;busy=1;const nm=url.includes('index')?'Macintosh System 7.5.3 (1996)':'macOS Sequoia 15 (2026)';
+  sfx('open');st.textContent='Preparing '+nm+' boot volume\u2026';bar.style.width='50%';
+  setTimeout(()=>{sfx('chime');st.textContent='Restarting into '+nm+'\u2026';bar.style.width='100%';setTimeout(()=>location.href=url,500)},800)};
+ el._go=go;el.addEventListener('click',e=>{const b=e.target.closest('[data-up]');if(b)go(b.dataset.up)})}
+Object.assign(W,{
+sherlock:{t:'Sherlock 2 \u2014 Find & Search',w:480,h:380,x:110,y:58,i:initSherlock,b:()=>`<div class="sh-ch"><button class="btn act" data-ch="all">All Channels</button><button class="btn" data-ch="proj">Projects</button><button class="btn" data-ch="exp">Research &amp; Roles</button><button class="btn" data-ch="web">2001 Web</button></div>
+<div style="display:flex;gap:6px"><input class="ad sh-in" placeholder="Search Adi's projects, skills, papers (e.g. PyTorch, Army, Agent)\u2026"><button class="btn df" data-sq="">All</button></div>
+<div style="margin-top:5px;font-size:12px">Quick tags: <button class="tag" data-sq="PyTorch">PyTorch</button><button class="tag" data-sq="Army">Indian Army</button><button class="tag" data-sq="Agent">Agents</button><button class="tag" data-sq="OR-Tools">OR-Tools</button><button class="tag" data-sq="Film">Film</button></div>
+<div class="sh-res"></div><p class="sh-st" style="margin:6px 0 0;font-size:12px;color:var(--sub)"></p>`},
+rexide:{t:'RexScript Studio v0.4 (Carbon)',w:490,h:380,x:135,y:66,i:initRex,b:()=>`<div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:4px;margin-bottom:6px"><div><button class="btn" data-rx="agent">deploy_agent.rex</button><button class="btn" data-rx="drone">drone_rf.rex</button><button class="btn" data-rx="slotly">slotly.rex</button></div><button class="btn df" data-rx="run">\u25B6 Compile &amp; Trace</button></div>
+<textarea class="rex-ed" spellcheck="false" aria-label="RexScript editor"></textarea><div class="rex-out"></div>`},
+update:{t:'Software Update (OS Switcher)',w:460,h:400,x:150,y:68,i:initUpdate,b:()=>`<h1>Mac OS Software Update</h1><p>Current OS: <b>Mac OS 9.2 Platinum (2001 Edition)</b></p>
+<div class="cp-sec"><b>\u2B06 Upgrade to Modern Release \u2014 macOS Sequoia 15 (2026)</b><p style="margin:4px 0">Experience full frosted glassmorphism, traffic-light window controls, magnifying Dock, <b>Spotlight (\u2318K)</b>, <b>Control Center</b>, Desktop Widgets, <b>Live Slotly Timetable Solver</b>, <b>XRisk AI Firewall Lab</b>, and <b>Adi AI Chat</b>.</p><button class="btn df" data-up="macos.html">Upgrade to macOS Sequoia 15 \u2192</button></div>
+<div class="cp-sec"><b>\u2B07 Downgrade to Classic \u2014 System 7.5.3 (1996)</b><p style="margin:4px 0">Return to crisp 1-bit black-and-white pixels, dithering patterns, and the 1996 Wayback Machine.</p><button class="btn" data-up="index.html?from=os9">\u2190 Downgrade to System 7.5.3</button></div>
+<div class="lbar"><i class="up-bar"></i></div><p class="up-st" style="margin:6px 0 0;font-size:12px">Choose an OS era above to reboot immediately.</p>`},
+resume:{t:'Resume.pdf',w:500,h:430,x:80,y:60,b:()=>`<h1>Aditya P Dixit</h1><p>AI/ML engineering student. Open source systems builder. CGPA 9.04.</p>
+<a class="btn df" href="${LINKS.email}">Email</a><a class="btn" href="${LINKS.github}" target="_blank" rel="noopener">GitHub</a><a class="btn" href="${LINKS.medium}" target="_blank" rel="noopener">Medium</a>
+<h2>Education</h2><p>B.Tech (Hons.) AI &amp; ML, minor in Film Direction. RV University, Bengaluru (2024–present). CGPA 9.04.</p>
+<h2>Experience</h2>
+<div class="row"><i>Jun–Jul 2026</i><span><b>AI Product Intern</b>, Sioman Technologies. CNN noise detection in PyTorch.</span></div>
+<div class="row"><i>Jun 2026–</i><span><b>Summer Intern</b>, CARA, RVU. Local LLMs, GEO/SEO, federated ML on LAN.</span></div>
+<div class="row"><i>May–Jun 2026</i><span><b>Research Assistant</b>, Drone Detection Project with the Indian Army.</span></div>
+<div class="row"><i>2025–2026</i><span><b>Director of Product</b> (AWS Club), <b>Placement Coordinator</b> (RVU), <b>Open Source Head</b> (FOSS United), <b>President</b> (Poéthra).</span></div>`},
+research:{t:'Research',w:460,h:360,x:100,y:90,b:()=>`<h1>Research</h1>
+<h2>Hierarchical Semantic Compression</h2><p>Refining toward conference submission.</p>
+<h2>CARA, RVU</h2><p>Federated machine learning on local LAN systems &amp; local LLMs.</p>
+<h2>Drone Detection (Indian Army)</h2><p>RF/DSP and ML algorithms evaluated in noisy real-world conditions.</p>`},
+projects:{t:'Projects',w:460,h:320,x:210,y:120,b:()=>'<div class="grid">'+P.map(p=>ico('doc',p[1],'p-'+p[0])).join('')+'</div>'},
+browser:{t:'Adiscape Navigator 4.7 (2001)',w:540,h:420,x:120,y:64,i:initBrowser,b:()=>`<div class="bt"><button data-b="back">&lt;</button><button data-b="fwd">&gt;</button><button data-b="home">Home</button><input class="ad" spellcheck="false"><button data-b="go">Go</button><i class="tr"></i></div>
+<div class="bm"><button data-b="q:google.com">Google \u201901</button><button data-b="q:wikipedia.org">Wikipedia \u201901</button><button data-b="q:apple.com">Apple \u201901</button><button data-b="q:slashdot.org">Slashdot \u201901</button><button data-b="q:github.com">GitHub (404 in \u201901)</button></div><div class="pg"></div><div class="sb">Document: Done</div>`},
+snake:{t:'Snake DX',w:300,h:410,x:260,y:80,i:initSnake,b:()=>`<canvas width="240" height="240" style="display:block;margin:0 auto;border:2px solid var(--dk)"></canvas><p class="sc" style="text-align:center;min-height:2.2em"></p>
+<div style="text-align:center"><button class="btn" data-k="U">Up</button><br><button class="btn" data-k="L">Left</button><button class="btn" data-k="D">Down</button><button class="btn" data-k="R">Right</button><br><button class="btn" data-k="A">Autopilot</button><button class="btn" data-k="X">Restart</button></div>`},
+term:{t:'MPW Shell',w:440,h:300,x:150,y:120,i:initTerm,b:()=>`<div class="to"></div><div class="tl"><span>adi%</span><input class="ti" autocomplete="off" spellcheck="false"></div>`},
+stickies:{t:'Stickies',w:310,h:260,x:460,y:54,i:initStickies,b:()=>`<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px"><span class="ni" style="font-weight:700"></span><div><button class="btn" data-n="nx">Next</button><button class="btn" data-n="nw">+ Note</button></div></div><textarea class="stk"></textarea>`},
+synth:{t:'QuickTime Synth',w:420,h:270,x:160,y:110,i:initSynth,b:()=>`<div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:4px"><div><button class="btn" data-s="sq">Square</button><button class="btn act" data-s="sw">Saw</button><button class="btn" data-s="tr">Tri</button></div><div><button class="btn" data-s="m1">OS 9 Chime</button><button class="btn" data-s="m2">Nocturne</button><button class="btn" data-s="m3">Sci-Fi</button></div></div><div class="kb"></div><p class="ks" style="margin:4px 0 0;font-size:12px">Click keys or play melodies.</p>`},
+mines:{t:'DQL Minesweeper',w:310,h:380,x:280,y:70,i:initMines,b:()=>`<div style="display:flex;justify-content:space-between;align-items:center"><button class="btn" data-m="r">New Game</button><button class="btn" data-m="f">Flag</button><button class="btn df" data-m="q">Ask DQL Agent</button></div><div class="mg"></div><p class="ms" style="text-align:center;margin:4px 0 0;font-size:12px"></p>`},
+cinema:{t:'Director\u2019s Cut (Script2Vision)',w:440,h:400,x:130,y:65,i:initCinema,b:()=>`<div class="sl"><div class="sl-top"></div><div class="sl-meta"></div></div><div class="vf"></div><div class="stx" style="margin:8px 0;min-height:3.2em"></div><div style="display:flex;justify-content:space-between"><button class="btn" data-c="p">&lt; Prev</button><button class="btn" data-c="cl">Clap Slate</button><button class="btn" data-c="n">Next &gt;</button><button class="btn" data-c="cm">Cinema Mode</button></div>`}});
+const ME=JSON.parse($('#me').textContent);
+const PAT=['#3b6ea5','#008080','#555b6e','#d96b27','#2c2255'];
+function finderRows(){const r=[['Read Me (OS 9.2)','Document',4,'10/2001','about'],['Software Update','Application',640,'10/2001','update'],['Sherlock 2','Application',128,'10/2001','sherlock'],['RexScript Studio','Application',256,'05/2026','rexide'],['Resume.pdf','Document',9.04,'06/2026','resume'],['agent.json','Document',2,'10/2026','agent'],['Research','Folder',0,'06/2026','research'],['Roles & Clubs','Folder',0,'08/2025','roles'],['Director\u2019s Cut','Application',35,'09/2026','cinema'],['Navigator 4.7','Application',512,'10/2001','browser'],['Doodle Pad Color','Application',128,'10/2001','paint']];
+ P.forEach(p=>r.push([p[1],'Project',p[3].length>>2,'2026','p-'+p[0]]));return r}
+function initFinder(el){let k=0,asc=1;const L=$('.fl',el),sb=$('.fs',el);
+ function draw(){const rs=finderRows().sort((a,b)=>(a[k]>b[k]?1:-1)*asc);
+  L.innerHTML=rs.map(r=>`<button class="ic fr" data-open="${r[4]}"><span>${esc(r[0])}</span><span>${r[1]}</span><span>${r[1]=='Folder'?'--':r[2]+' KB'}</span><span>${r[3]}</span></button>`).join('');
+  sb.textContent=rs.length+' items, 9.04 GB available'}
+ el.addEventListener('click',e=>{const b=e.target.closest('.fh button');if(!b)return;const i=+b.dataset.s;if(i==k)asc=-asc;else{k=i;asc=1}draw()});draw()}
+function initPaint(el){const c=$('canvas',el),x=c.getContext('2d');let tool='p',col='#333399',dn=0,lx,ly,u;x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.lineCap='round';
+ const pos=e=>{const r=c.getBoundingClientRect();return[(e.clientX-r.left)*c.width/r.width,(e.clientY-r.top)*c.height/r.height]};
+ const snap=()=>u=x.getImageData(0,0,c.width,c.height);
+ function stroke(a,b,p,q){if(tool=='s'){x.fillStyle=col;for(let i=0;i<10;i++){const r=Math.random()*10,t=Math.random()*6.3;x.fillRect(p+r*Math.cos(t),q+r*Math.sin(t),2,2)}return}
+  x.strokeStyle=tool=='e'?'#fff':col;x.lineWidth=tool=='p'?2:tool=='b'?7:16;x.beginPath();x.moveTo(a,b);x.lineTo(p,q);x.stroke()}
+ c.addEventListener('pointerdown',e=>{c.setPointerCapture(e.pointerId);snap();dn=1;[lx,ly]=pos(e);stroke(lx,ly,lx,ly)});
+ c.addEventListener('pointermove',e=>{if(!dn)return;const[a,b]=pos(e);stroke(lx,ly,a,b);lx=a;ly=b});
+ ['pointerup','pointercancel'].forEach(n=>c.addEventListener(n,()=>dn=0));
+ el.addEventListener('click',e=>{const sc=e.target.closest('[data-col]');if(sc){col=sc.dataset.col;el.querySelectorAll('[data-col]').forEach(k=>k.classList.toggle('act',k===sc));return}
+  const b=e.target.closest('[data-t]');if(!b)return;const t=b.dataset.t;
+  if('pbse'.includes(t)){tool=t;el.querySelectorAll('[data-t]').forEach(k=>k.classList.toggle('act',k===b))}
+  else if(t=='u'){u&&x.putImageData(u,0,0)}else if(t=='c'){snap();x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height)}
+  else{const a=document.createElement('a');a.download='doodle-os9.png';a.href=c.toDataURL();a.click()}})}
+let vol=.5,clOn=true,cl;const ls=(k,v)=>{try{if(v===undefined)return localStorage.getItem(k);localStorage.setItem(k,v)}catch(e){}};
+function setPat(n){document.documentElement.style.setProperty('--desk',PAT[n]||PAT[0]);document.querySelectorAll('.pat').forEach((b,i)=>b.classList.toggle('act',i===n))}
+const th=v=>{const r=document.documentElement;v==='auto'?delete r.dataset.theme:r.dataset.theme=v};
+function initCtl(el){el.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const d=b.dataset;
+ if(d.p!=null)setPat(+d.p);else if(d.th)th(d.th);else if(d.cl)clarus(1)})}
+function initAgent(el){el.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(b)navigator.clipboard&&navigator.clipboard.writeText(JSON.stringify(ME,null,2)).then(()=>b.textContent='Copied')})}
+Object.assign(W,{
+finder:{t:'Adi HD (Mac OS 9.2)',w:500,h:340,x:70,y:60,i:initFinder,b:()=>`<div class="fh"><button data-s="0">Name</button><button data-s="1">Kind</button><button data-s="2">Size</button><button data-s="3">Date</button></div><div class="fl"></div><div class="fs"></div>`},
+paint:{t:'Color Doodle Pad (256-Color)',w:440,h:400,x:190,y:66,i:initPaint,b:()=>`<div class="pt">${[['p','Pencil'],['b','Brush'],['s','Airbrush'],['e','Eraser'],['u','Undo'],['c','Clear'],['v','Save']].map(t=>`<button class="btn${t[0]=='p'?' act':''}" data-t="${t[0]}">${t[1]}</button>`).join('')}<div style="display:flex;gap:3px;margin-left:auto">${['#111111','#333399','#e74c3c','#27ae60','#f39c12','#8e44ad','#00a8ff'].map((c,i)=>`<button class="sw-c${i==1?' act':''}" data-col="${c}" style="background:${c}"></button>`).join('')}</div></div><canvas class="cv" width="480" height="310"></canvas>`},
+ctl:{t:'Appearance Control Panel',w:390,h:340,x:240,y:80,i:initCtl,b:()=>`<div class="cp-sec"><b>Mac OS 9 Desktop Color</b><div style="display:flex;gap:8px;flex-wrap:wrap">${PAT.map((p,i)=>`<button class="pat" data-p="${i}" style="background:${p}"></button>`).join('')}</div></div>
+<div class="cp-sec"><b>Platinum Theme</b><div style="display:flex;gap:6px"><button class="btn" data-th="light">Platinum Light</button><button class="btn" data-th="dark">Graphite Dark</button></div></div>
+<div class="cp-sec"><b>Clarus the Dogcow</b><button class="btn" data-cl="1">Call Clarus</button></div>`},
+agent:{t:'agent.json',w:500,h:380,x:90,y:60,i:initAgent,b:()=>`<h1>Hello, agent.</h1><button class="btn df" data-a="copy">Copy JSON</button><pre class="js">${esc(JSON.stringify(ME,null,1))}</pre>`}});
+const wins={};let z=10,actApp='finder';
+const R=e=>e.getBoundingClientRect();
+const hitR=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+function shadeWin(el){el.classList.toggle('shade');sfx('shade')}
+function winCtl(el){const bd=$('.bd',el),g=$('.gb',el);let old;
+ g.addEventListener('pointerdown',e=>{e.preventDefault();e.stopPropagation();g.setPointerCapture(e.pointerId);const r=R(el),sx=e.clientX,sy=e.clientY;bd.style.maxHeight='none';el.classList.remove('shade');
+  const mv=v=>{el.style.width=Math.max(240,r.width+v.clientX-sx)+'px';el.style.height=Math.max(140,r.height+v.clientY-sy)+'px'};
+  const up=()=>{g.removeEventListener('pointermove',mv);g.removeEventListener('pointerup',up)};g.addEventListener('pointermove',mv);g.addEventListener('pointerup',up)});
+ $('.shd',el).onclick=e=>{e.stopPropagation();shadeWin(el)};
+ $('.zm',el).onclick=e=>{e.stopPropagation();el.classList.add('an');el.classList.remove('shade');
+  if(old){const{mh,...o}=old;Object.assign(el.style,o);bd.style.maxHeight=mh;old=null}
+  else{old={left:el.style.left,top:el.style.top,width:el.style.width,height:el.style.height,mh:bd.style.maxHeight};bd.style.maxHeight='none';Object.assign(el.style,{left:'12px',top:'34px',width:innerWidth-24+'px',height:innerHeight-80+'px'})}
+  setTimeout(()=>el.classList.remove('an'),240);sfx('click')}}
+function focus(el){Object.values(wins).forEach(w=>w.classList.remove('on'));if(el){el.classList.add('on');el.style.zIndex=++z;actApp=el.dataset.w}else actApp='finder';syncMenu()}
+function drag(el,h,snap){h.addEventListener('pointerdown',e=>{if(e.target.closest('.cl,.zm,.shd'))return;const r=R(el),dx=e.clientX-r.left,dy=e.clientY-r.top;let m=0;h.setPointerCapture(e.pointerId);
+ const mv=v=>{m=Math.max(m,Math.abs(v.clientX-e.clientX)+Math.abs(v.clientY-e.clientY));if(m<4)return;el.classList.add('drg');el.style.left=Math.max(-el.offsetWidth+70,Math.min(innerWidth-40,v.clientX-dx))+'px';el.style.top=Math.max(28,Math.min(innerHeight-36,v.clientY-dy))+'px'};
+ const up=()=>{h.removeEventListener('pointermove',mv);h.removeEventListener('pointerup',up);el.classList.remove('drg');if(m>=4){el._m=1;setTimeout(()=>el._m=0,50)}};
+ h.addEventListener('pointermove',mv);h.addEventListener('pointerup',up)})}
+function open(id){
+ if(wins[id]){const w=wins[id];w.classList.remove('shade');focus(w);return}
+ const d=W[id];if(!d)return;const n=Object.keys(wins).length,mob=innerWidth<700,el=document.createElement('section');
+ el.className='win';el.dataset.w=id;el.style.width=Math.min(d.w,innerWidth-16)+'px';
+ el.style.left=(mob?6:d.x+n*14)+'px';el.style.top=(mob?38+n*14:d.y+n*12)+'px';
+ el.innerHTML=`<header class="tb"><button class="cl" title="Close"></button><i class="st"></i><b>${d.t}</b><i class="st"></i><button class="zm" title="Zoom"></button><button class="shd" title="WindowShade"></button></header><div class="bd" style="max-height:${Math.min(d.h,innerHeight-120)}px">${d.b()}</div><i class="gb"></i>`;
+ sfx('open');$('#desk').append(el);wins[id]=el;focus(el);
+ el.addEventListener('pointerdown',()=>focus(el));drag(el,$('.tb',el));
+ $('.cl',el).onclick=()=>shut(id);$('.tb',el).ondblclick=e=>{if(!e.target.closest('.cl,.zm,.shd'))shadeWin(el)};winCtl(el);d.i&&d.i(el);
+ if(id==='about'){const t='Hello, I\u2019m Adi.',s=$('#tw',el);let i=0;const k=setInterval(()=>{s.textContent=t.slice(0,++i);if(i>=t.length)clearInterval(k)},60)}}
+function shut(id){const el=wins[id];if(!el)return;sfx('close');el.remove();delete wins[id];
+ const top=Object.values(wins).sort((a,b)=>b.style.zIndex-a.style.zIndex)[0];focus(top||null)}
+const closeAll=()=>Object.keys(wins).forEach(shut);
+function alertBox(msg,btns,ic){const o=document.createElement('div');o.id='ov';
+ o.innerHTML=`<div class="al" role="alertdialog">${IC[ic||'face']}<div><p style="margin:0 0 12px">${msg}</p><div>${btns.map((b,i)=>`<button class="btn${i==btns.length-1?' df':''}">${b[0]}</button>`).join('')}</div></div></div>`;
+ document.body.append(o);[...o.querySelectorAll('.btn')].forEach((b,i)=>b.onclick=()=>{o.remove();btns[i][1]&&btns[i][1]()})}
+const APP_IC={finder:'face',sherlock:'sherlock',rexide:'rex',update:'up',browser:'globe',paint:'paint',term:'term',snake:'game',mines:'bomb',cinema:'slate',stickies:'note',synth:'synth',ctl:'ctl',projects:'folder',research:'folder'};
+function dTitle(id){return(W[id]&&W[id].t)||'Finder'}
+function getAppMenus(){const w=wins[actApp],cl=()=>w&&shut(actApp),sh=()=>w&&shadeWin(w);
+ const def={
+  File:[['Sherlock 2 Search\u2026',()=>open('sherlock')],['RexScript Studio',()=>open('rexide')],['Open Projects',()=>open('projects')],['Open Resume',()=>open('resume')],['Software Update\u2026',()=>open('update')],['Close All',closeAll]],
+  View:[['Clean Up Desktop',()=>desk()],['Appearance Control Panel',()=>open('ctl')]],
+  Special:[['Software Update (OS Switcher)\u2026',()=>open('update')],['Upgrade to macOS Sequoia 15',()=>location.href='macos.html'],['Downgrade to System 7.5.3',()=>location.href='index.html?from=os9'],['Cinema Mode',toggleCinema],['Call Clarus',()=>clarus(1)]]};
+ if(actApp==='sherlock')return{Find:[['All Channels',()=>open('sherlock')],['Close Sherlock 2',cl]],Special:def.Special};
+ if(actApp==='rexide')return{Compiler:[['Compile & Trace (.rex)',()=>w._run&&w._run()],['Close Studio',cl]],Special:def.Special};
+ if(w&&actApp!=='finder')return{File:[['Close '+dTitle(actApp),cl],['Close All Windows',closeAll]],Window:[['WindowShade Collapse',sh],['Zoom Window',()=>$('.zm',w).click()]],Special:def.Special};
+ return def}
+const M={apple:[['About Mac OS 9.2\u2026',()=>alertBox('<b>Mac OS 9.2 Platinum (2001)</b><br>Memory: 9.04 GB (CGPA)<br>New in OS 9.2: Sherlock 2, RexScript Carbon Studio, 2001 Wayback Machine.',[['OS Switcher\u2026',()=>open('update')],['OK']])],['Software Update (OS Switcher)\u2026',()=>open('update')],['Sherlock 2\u2026',()=>open('sherlock')],['RexScript Studio',()=>open('rexide')],['Stickies',()=>open('stickies')],['QuickTime Synth',()=>open('synth')],['DQL Minesweeper',()=>open('mines')],['Director\u2019s Cut',()=>open('cinema')],['Appearance Panel',()=>open('ctl')]]};
+function syncMenu(){const am=$('#am'),sw=$('#app-sw'),menus=getAppMenus();
+ Object.keys(M).forEach(k=>{if(k!=='apple')delete M[k]});Object.assign(M,menus);
+ M.apps=[['Finder',()=>focus(null)],...Object.keys(wins).map(id=>[(id===actApp?'\u2713 ':'')+dTitle(id),()=>open(id)]),['Upgrade / Downgrade OS\u2026',()=>open('update')]];
+ am.innerHTML=Object.keys(menus).map(k=>`<button data-m="${esc(k)}">${esc(k)}</button>`).join('');
+ const ic=APP_IC[actApp]||'doc';sw.innerHTML=`${IC[ic]}<span>${esc(actApp==='finder'?'Finder':dTitle(actApp).split(' ')[0])}</span>`;
+ document.querySelectorAll('#mb [data-m]').forEach(b=>{b.onclick=e=>{e.stopPropagation();cur===b?clear():menu(b)};b.onmouseenter=()=>{if(cur&&cur!==b)menu(b)}})}
+let cur=null;
+function menu(b){clear();if(!b)return;cur=b;b.classList.add('o');const r=R(b),d=document.createElement('div');d.className='dd';d.style.top=r.bottom+'px';
+ (M[b.dataset.m]||[]).forEach(([l,f])=>{const i=document.createElement('button');i.className='mi';i.textContent=typeof l==='function'?l():l;i.onclick=e=>{e.stopPropagation();i.classList.add('bl');setTimeout(()=>{clear();f()},180)};d.append(i)});
+ document.body.append(d);const dr=R(d);d.style.left=Math.max(4,Math.min(innerWidth-dr.width-4,r.left))+'px'}
+function clear(){document.querySelectorAll('.dd').forEach(e=>e.remove());if(cur)cur.classList.remove('o');cur=null}
+document.addEventListener('click',e=>{if(!e.target.closest('.dd'))clear()});
+const touch=matchMedia('(hover:none)').matches;
+function sel(ic){document.querySelectorAll('.ic.sel').forEach(i=>i.classList.remove('sel'));ic.classList.add('sel')}
+function act(e){const o=e.target.closest('[data-open]');if(!o)return;if(o.tagName==='A')e.preventDefault();
+ if(o.classList.contains('ic')&&!o.classList.contains('fr')){if(o._m)return;if(e.type==='click'){sel(o);if(!(touch||e.detail===0))return}}
+ open(o.dataset.open)}
+document.addEventListener('click',act);document.addEventListener('dblclick',act);
+function desk(){document.querySelectorAll('#desk>.ic').forEach(e=>e.remove());
+ const L=[['disk','Adi HD','finder'],['up','System Update','update'],['sherlock','Sherlock 2','sherlock'],['rex','RexScript IDE','rexide'],['folder','Projects','projects'],['doc','Resume.pdf','resume'],['folder','Research','research'],['slate','Director\u2019s Cut','cinema'],['globe','Navigator 4.7','browser'],['paint','Color Paint','paint'],['bomb','Minesweeper','mines'],['synth','QT Synth','synth'],['term','MPW Shell','term'],['ctl','Appearance','ctl']],
+ per=Math.max(1,Math.floor((innerHeight-150)/86));
+ L.forEach((l,i)=>{const e=document.createElement('div');e.innerHTML=ico(...l);const b=e.firstChild;b.style.left=innerWidth-94-Math.floor(i/per)*94+'px';b.style.top=38+(i%per)*84+'px';$('#desk').append(b);drag(b,b,1)});
+ $('#lbar').innerHTML=[['sherlock','Sherlock 2','sherlock'],['rex','RexScript IDE','rexide'],['globe','Navigator \u201901','browser'],['folder','Projects','projects'],['slate','Director\u2019s Cut','cinema'],['up','OS Switcher','update']].map(x=>`<button class="ltab" data-open="${x[2]}">${IC[x[0]]}<span>${x[1]}</span></button>`).join('')}
+function clock(){$('#clk').textContent=new Date().toLocaleTimeString([],{hour:'numeric',minute:'2-digit'})}
+clock();setInterval(clock,10000);
+let snd=false,AC;try{snd=localStorage.getItem('snd')==='1'}catch(e){}
+function beep(f,d,t,at){AC=AC||new(window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume();const o=AC.createOscillator(),g=AC.createGain(),s=AC.currentTime+(at||0);o.type=t||'triangle';o.frequency.value=f;g.gain.setValueAtTime(.1*vol,s);g.gain.exponentialRampToValueAtTime(.0001,s+d);o.connect(g);g.connect(AC.destination);o.start(s);o.stop(s+d)}
+const SFX={click:[[950,.025]],blip:[[1320,.04]],open:[[587,.05],[880,.07]],close:[[880,.05],[587,.07]],shade:[[740,.03],[580,.04]],chime:[[392,.22],[587,.22],[784,.25],[1175,.45]],bomb:[[110,.45,'sawtooth']],clap:[[1800,.02,'sawtooth'],[400,.06,'square']],moof:[[220,.12,'sawtooth'],[165,.22,'sawtooth']]};
+function sfx(n){if(!snd)return;try{SFX[n].forEach((a,i)=>beep(a[0],a[1],a[2],i*.08))}catch(e){}}
+function setSnd(v,q){snd=v;try{localStorage.setItem('snd',v?'1':'0')}catch(e){};const w=$('#sp .w'),x=$('#sp .x');if(w)w.style.display=v?'':'none';if(x)x.style.display=v?'none':'';if(!q)sfx('chime')}
+$('#sp').onclick=()=>setSnd(!snd);setSnd(snd,1);
+const CLR=`<svg viewBox="0 0 50 34" fill="#fff" stroke="#111" stroke-width="2"><g class="l1"><rect x="9" y="22" width="4" height="9"/><rect x="26" y="22" width="4" height="9"/></g><g class="l2"><rect x="15" y="22" width="4" height="9"/><rect x="32" y="22" width="4" height="9"/></g><rect x="6" y="9" width="32" height="15"/><rect x="12" y="11" width="7" height="6" fill="#333399"/><rect x="26" y="15" width="7" height="6" fill="#333399"/><rect x="34" y="4" width="12" height="13"/></svg>`;
+async function clarus(){if(cl)return;cl=document.createElement('div');cl.className='cdc wk';cl.innerHTML=CLR+'<b class="mf">Moof! (in 256 colors!)</b>';document.body.append(cl);
+ await cl.animate([{left:'-70px'},{left:innerWidth/2+'px'}],{duration:2600,fill:'forwards'}).finished;cl.classList.add('say');sfx('moof');
+ await new Promise(r=>setTimeout(r,1400));await cl.animate([{left:innerWidth/2+'px'},{left:innerWidth+70+'px'}],{duration:2600,fill:'forwards'}).finished;cl.remove();cl=null}
+function boot(){const b=$('#boot'),bar=$('#bar i'),x=$('#ext'),c=$('#cap');bar.style.width='100%';
+ [['Sherlock 2','sherlock'],['RexScript Carbon','rex'],['QuickTime 5','synth'],['Open Transport','globe'],['Appearance','ctl']].forEach((n,i)=>setTimeout(()=>{x.insertAdjacentHTML('beforeend',IC[n[1]]);c.textContent='Loading '+n[0]+'\u2026'},120+i*180));
+ let done=0;const go=()=>{if(done)return;done=1;b.style.display='none';sfx('chime');desk();syncMenu();open('about');if(innerWidth>900)setTimeout(()=>open('sherlock'),350)};
+ b.onclick=go;setTimeout(go,1150)}
+addEventListener('resize',()=>desk());
+boot();
+</script>
+</body>
+</html>
